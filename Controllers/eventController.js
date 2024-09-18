@@ -1,6 +1,6 @@
-const eventModel = require("../models/EventModel");
+import {eventModel} from "../models/EventModel.js";
 
-const createEvent = async (req, res) => {
+export const createEvent = async (req, res) => {
   const {
     eventName,
     eventDescription,
@@ -20,4 +20,3 @@ const createEvent = async (req, res) => {
     });
 };
 
-module.exports = { createEvent };

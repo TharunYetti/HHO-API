@@ -1,10 +1,7 @@
-import express from "express";
-import mongoose from "mongoose";
 import { volunterModel } from "../models/volunteer.js";
+import mongoose from "mongoose";
 
-const router = express.Router();
-
-router.post('/vol-registration',async(req,res)=>{
+export const volunteerRegistration = async(req,res)=>{
     try {
         const {vol_email,vol_name,vol_phNo,vol_id,vol_evtName} = req.body;
         if(!vol_email || !vol_name || !vol_phNo || !vol_id || !vol_evtName){
@@ -29,5 +26,4 @@ router.post('/vol-registration',async(req,res)=>{
         console.log(error.message);
         return res.json({"Error":"True","Message":error.message});
     }
-})  
-export default router;
+}

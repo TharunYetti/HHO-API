@@ -1,17 +1,31 @@
-const express = require("express");
+import express from "express";
+import mongoose from "mongoose";
+import offusers from "./Routes/offuserRoutes.js";
+import volunteerRoutes from "./Routes/volunteerRoutes.js";
+import cors from 'cors';
+import eventRoute from "./Routes/eventRoute.js";
 const app = express();
-const connectToDB = require("./connectDB.js");
-const dotenv = require("dotenv");
+
+import connectToDB from "./connectDB.js";
+
+import dotenv from "dotenv";
+dotenv.config();
+
 app.use(express.static("public"));
 app.use(express.json());
-dotenv.config();
+app.use(cors());
 connectToDB();
+
 const port = process.env.PORT;
 
 app.get("/",(req,res)=>{
     res.send("Working");
 })
-app.use("/api/event",require("./Routes/eventRoute.js"));
+
+app.use("/api/event",eventRoute);
+app.use('/api/users/offusers',offusers);
+app.use('/api/volunteers',volunteerRoutes);
+
 app.listen(port,()=>{
     console.log(`Server running at http://localhost:${port}`);
 })

@@ -1,11 +1,8 @@
-import express from "express";
-const router = express.Router();
 import { offUserModel } from "../models/off_users.js";
 import jwt from 'jsonwebtoken';
-import { JWT_SECRET_KEY } from "../config.js";
+const JWT_WEB_TOKEN = process.env.JWT_WEB_TOKEN;
 
-
-router.post("/login", async (req, res) => {
+export const offUserLogin = async (req, res) => {
     try {
         // console.log(req.body);
         const { off_name, off_email, off_password, role } = req.body;
@@ -62,7 +59,4 @@ router.post("/login", async (req, res) => {
         console.log(error.message);
         return res.json({ "Error": "True", "Message": error.message });
     }
-})
-
-
-export default router
+}

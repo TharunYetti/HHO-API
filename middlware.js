@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
-import { JWT_SECRET_KEY } from "./config.js";
+
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 export const middleware = (req, res, next) => {
     try {
