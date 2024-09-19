@@ -9,11 +9,11 @@ const eventSchema = mongoose.Schema({
         type:String,
         required:true
     },
-    eventDate:{
+    event_start_date:{
         type:Date,
         required:true
     },
-    eventTime:{
+    event_end_date:{
         type:String,
         required:true
     },
@@ -21,12 +21,12 @@ const eventSchema = mongoose.Schema({
         type:String,
         required:true
     },
-    eventType:{
-        type:String,
-        required:true
-    },
     eventPoster:{
         type:String
+    },
+    preEvents:{
+        type:[String],
+        required:true
     }
 },{
     timestamps:true,
