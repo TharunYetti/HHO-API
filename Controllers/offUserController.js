@@ -5,24 +5,23 @@ const JWT_WEB_TOKEN = process.env.JWT_WEB_TOKEN;
 export const offUserLogin = async (req, res) => {
     try {
         // console.log(req.body);
-        const { off_name, off_email, off_password, role } = req.body;
+        const { name, email, password, role } = req.body;
 
-        if (!off_name || !off_email || !off_password || !role) {
+        if (!name || !email || !password || !role) {
             return res.json({ "Error": "True", "Message": "All Fields Required..." });
         }
 
 
-        const userExist = await offUserModel.findOne({off_email});
+        const userExist = await offUserModel.findOne({email});
         console.log(userExist);
 
         if (!userExist) {
             return res.json({ "Error": "True", "Message": "Login with Valid Credentials...." });
         }
 
-        console.log("hi");
-        console.log(off_password);
-        console.log(userExist.off_password);
-        if (off_password != userExist.off_password) {
+        console.log(password);
+        console.log(userExist.password);
+        if (password != userExist.password) {
             return res.json({ "Error": "True", "Message": "Login with Valid Credentials..." });
         }
     
@@ -32,7 +31,7 @@ export const offUserLogin = async (req, res) => {
             return res.json({ "Error": "True", "Message": "Login with Valid Credentials..." });
         }
 
-        if (off_name != userExist.off_name) {
+        if (name != userExist.name) {
             return res.json({ "Error": "True", "Message": "Login with Valid Credentials..." });
         }
 

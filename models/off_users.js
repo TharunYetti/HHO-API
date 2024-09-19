@@ -1,21 +1,26 @@
 import mongoose from "mongoose";
 
 const offUserSchema = new mongoose.Schema({
-    off_name:{
+    name:{
        type:String,
        requried:true
     },
-    off_email:{
+    email:{
         type:String,
         requried:true
     },
-    off_password:{
+    password:{
         type:String,
         requried:true
     },
     role:{
         type:String,
         requried:true
+    },
+    status:{
+        type: String,
+        enum: ['inactive','active'],
+        requried: true
     }
 })
 
