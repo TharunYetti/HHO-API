@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 const TransactionsSchema = new mongoose.Schema({
     date: {
         type: Date,
