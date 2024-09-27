@@ -1,13 +1,16 @@
 import { offUserModel } from "../models/off_users.js";
 import jwt from 'jsonwebtoken';
-const JWT_WEB_TOKEN = process.env.JWT_WEB_TOKEN;
+import dotenv from "dotenv";
+dotenv.config();
+
+const JWT_SECRET_KEY= process.env.JWT_SECRET_KEY
 
 export const offUserLogin = async (req, res) => {
     try {
         // console.log(req.body);
-        const { name, email, password, role } = req.body;
+        const { email, password } = req.body;
 
-        if (!name || !email || !password || !role) {
+        if (!email || !password) {
             return res.json({ "Error": "True", "Message": "All Fields Required..." });
         }
 
@@ -26,14 +29,14 @@ export const offUserLogin = async (req, res) => {
         }
     
         console.log("helllo");
+        
+        // if (role != userExist.role) {
+        //     return res.json({ "Error": "True", "Message": "Login with Valid Credentials..." });
+        // }
 
-        if (role != userExist.role) {
-            return res.json({ "Error": "True", "Message": "Login with Valid Credentials..." });
-        }
-
-        if (name != userExist.name) {
-            return res.json({ "Error": "True", "Message": "Login with Valid Credentials..." });
-        }
+        // if (name != userExist.name) {
+        //     return res.json({ "Error": "True", "Message": "Login with Valid Credentials..." });
+        // }
 
 
         const payload = {
@@ -42,14 +45,15 @@ export const offUserLogin = async (req, res) => {
                 role:userExist.role
             }
         }
-
+        console.log(JWT_SECRET_KEY);
         //jwt sign
         jwt.sign(payload,JWT_SECRET_KEY,{"expiresIn":"100d"},
             (err,token)=>{
                 if(err){
+                    console.log(err.message);
                     return res.json({"Error":"True","Message":"Token is not generated"});
                 }
-
+                console.log(token);
                 return res.json({token});
             }
         )

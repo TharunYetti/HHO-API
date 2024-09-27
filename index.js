@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import offusers from "./Routes/offuserRoutes.js";
 import volunteerRoutes from "./Routes/volunteerRoutes.js";
+import { transactionUpdate } from "./Controllers/transactionController.js";
 import cors from 'cors';
 import eventRoute from "./Routes/eventRoute.js";
 const app = express();
@@ -26,8 +27,8 @@ app.get("/",(req,res)=>{
 app.use("/api/event",eventRoute);
 app.use('/api/users/offusers',offusers);
 app.use('/api/volunteers',volunteerRoutes);
-app.use('/api/transaction',transactionsRoute);
-app.use("/api/testimonials",testimonialRoute);
+app.use('/api/transaction',transactionUpdate);
+
 app.listen(port,()=>{
     console.log(`Server running at http://localhost:${port}`);
 })
