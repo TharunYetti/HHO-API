@@ -6,7 +6,7 @@ import { transactionUpdate } from "./Controllers/transactionController.js";
 import cors from 'cors';
 import eventRoute from "./Routes/eventRoute.js";
 const app = express();
-
+import testimonialRoute from "./Routes/testimonialRoute.js";
 import connectToDB from "./connectDB.js";
 
 import dotenv from "dotenv";
@@ -27,7 +27,7 @@ app.use("/api/event",eventRoute);
 app.use('/api/users/offusers',offusers);
 app.use('/api/volunteers',volunteerRoutes);
 app.use('/api/transaction',transactionUpdate);
-
+app.use("/api/testimonials",testimonialRoute);
 app.listen(port,()=>{
     console.log(`Server running at http://localhost:${port}`);
 })
