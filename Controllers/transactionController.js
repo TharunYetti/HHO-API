@@ -1,6 +1,7 @@
 import { transactions } from "../models/TransactionModel.js";
 import mongoose from "mongoose";
 
+//create route
 export const createTransaction = async (req,res)=>{
     try{
         const {transaction_type, amount, purpose} = req.body;
@@ -15,7 +16,7 @@ export const createTransaction = async (req,res)=>{
         if(!res){
             return res.json({"Error":"True","Message":"Error in pushing data into database"});
         }
-        return res.json({"Message":"Succesfully Updated the transaction..."});
+        return res.json({"Message":"Succesfully Uploaded the transaction"});
 
 
     }catch(error){
@@ -24,6 +25,7 @@ export const createTransaction = async (req,res)=>{
     }
 }
 
+//update route
 export const updateTransaction= async (req,res)=>{
     try{
         const {transaction_id, date} = req.body; //for reference
@@ -51,5 +53,30 @@ export const updateTransaction= async (req,res)=>{
     }catch(error){
         console.log(error.message);
         return res.json({"Status":"Error","Message":error.message});
+    }
+}
+
+//delete route
+export const deleteTransaction = async (req,res)=>{
+    try{
+        const id = req.params.id;
+        const deletedTransaction = await transactions.findByIdAndDelete(id);
+        if(!deletedTransaction){
+            return res.json({"Status":"Error","Message":"Transaction is not deleted"});
+        }
+        res.status(200).json({"Status":"Success","Message":"Transaction deleted successfully"});
+    }catch(error){
+        console.log(error.message);
+        return res.json({'Status':"Error","Message":error.message});
+    }
+}
+
+//get route
+export const getAllTransactions = async (req,res)=>{
+    try{
+        const allTransactions = await transactions.find({});
+        res.status(200).json(allTransactions);
+    }catch(err){
+        return res.json({"Status":"Error","Message":err.message});
     }
 }
