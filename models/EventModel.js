@@ -25,7 +25,7 @@ const eventSchema = mongoose.Schema({
         type:String
     },
     preEvents:{
-        type:[String],
+        type:[mongoose.Schema.Types.ObjectId],
         required:true
     }
 },{
