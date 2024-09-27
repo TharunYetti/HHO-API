@@ -80,3 +80,44 @@ export const getAllTransactions = async (req,res)=>{
         return res.json({"Status":"Error","Message":err.message});
     }
 }
+
+//get on search
+export const getMatchedTransactions = async (req,res)=>{
+    try{
+        const searchTerm = req.query.search;
+        let amountSearch = null;
+        let dateSearch = null;
+
+        if (!isNaN(searchTerm)) {
+            amountSearch = Number(searchTerm);
+        }
+        const parsedDate = new Date(searchTerm);
+        if (!isNaN(parsedDate.getTime())) { // Check if it's a valid date
+            dateSearch = parsedDate; // Valid date
+        }
+
+        const query = {
+            $or: [
+                { purpose: { $regex: searchTerm, $options: 'i' } } // Searching in purpose field
+            ]
+        };
+        // Adding date search to query if valid
+        if (dateSearch) {
+            const startOfDay = new Date(dateSearch.setHours(0, 0, 0, 0));
+            const endOfDay = new Date(dateSearch.setHours(23, 59, 59, 999));
+            query.$or.push({ date: { $gte: startOfDay, $lt: endOfDay } }); // Match all entries within the date
+        }
+        // Adding amount search to query if valid
+        if (amountSearch !== null) {
+            query.$or.push({ amount: { $eq: amountSearch } });
+        }
+
+        // Fetch matching transactions
+        const matchingTransactions = await transactions.find(query);
+
+        return res.status(200).json(matchingTransactions);
+
+    }catch(err){
+        return res.json({"Status":"Error","Message":err.message});
+    }
+}
