@@ -1,5 +1,5 @@
 import express from "express";
-import { volunteerRegistration } from "../Controllers/volunteerController.js";
+import { volunteerRegistration } from "../Controllers/volunteerController";
 const router = express.Router();
 
 router.post('/vol-registration',volunteerRegistration);  

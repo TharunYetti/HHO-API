@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-
-const subEventSchema = new mongoose.Schema({
+import {SubEventDocument} from './models';
+const subEventSchema = new mongoose.Schema<SubEventDocument>({
     name:{
         type:String,
         required:true
@@ -33,6 +33,6 @@ const subEventSchema = new mongoose.Schema({
     timestamps:true
 })
 
-const subEventModel = mongoose.model('subEvents',subEventSchema);
+const subEventModel = mongoose.model<SubEventDocument>('subEvents',subEventSchema);
 
 export default subEventModel;

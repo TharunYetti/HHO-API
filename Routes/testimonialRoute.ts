@@ -6,7 +6,7 @@ import {
   updateTestimonial,
   createTestimonial,
   deleteTestimonial,
-} from "../Controllers/testimonialController.js";
+} from "../Controllers/testimonialController";
 
 router.get("/", getTestimonial);
 router.post("/createTestimonial", createTestimonial);

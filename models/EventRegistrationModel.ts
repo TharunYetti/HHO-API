@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-
-const EventRegistrationsSchema = new mongoose.Schema({
+import {EventRegistrationDocument} from "./models";
+const EventRegistrationsSchema = new mongoose.Schema<EventRegistrationDocument>({
     name: {
         type: String,
         require: true
@@ -23,4 +23,4 @@ const EventRegistrationsSchema = new mongoose.Schema({
     }
 });
 
-export const eventRegistrations = new mongoose.model("eventRegistrations",EventRegistrationsSchema);
+export const eventRegistrations = mongoose.model<EventRegistrationDocument>("eventRegistrations",EventRegistrationsSchema);

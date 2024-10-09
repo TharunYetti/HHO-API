@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-const TransactionsSchema = new mongoose.Schema({
+import {TransactionDocument} from "./models";
+const TransactionsSchema = new mongoose.Schema<TransactionDocument>({
     date: {
         type: Date,
         require: true,
@@ -20,4 +21,4 @@ const TransactionsSchema = new mongoose.Schema({
     }
 });
 
-export const transactions = new mongoose.model("transactions",TransactionsSchema);
+export const transactions =  mongoose.model<TransactionDocument>("transactions",TransactionsSchema);

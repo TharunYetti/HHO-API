@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-
-const volunteerSchema = new mongoose.Schema({
+import {VolunteerDocument} from "./models";
+const volunteerSchema = new mongoose.Schema<VolunteerDocument>({
     vol_name:{
         type:String,
         required:true
@@ -23,4 +23,4 @@ const volunteerSchema = new mongoose.Schema({
     }
 })
 
-export const volunterModel = new mongoose.model('volunteers',volunteerSchema);
+export const volunterModel =  mongoose.model<VolunteerDocument>('volunteers',volunteerSchema);

@@ -1,8 +1,7 @@
 import mongoose from 'mongoose';
-
-const { Schema } = mongoose;
-
-const donationSchema = new Schema({
+const { Schema, model } = mongoose;
+import { DonationDocument } from './models';
+const donationSchema = new Schema<DonationDocument>({
   name: {
     type: String,
     required: true
@@ -27,5 +26,5 @@ const donationSchema = new Schema({
 });
 
 // Export the Donation model
-const Donation = mongoose.model('Donation', donationSchema);
+const Donation = model<DonationDocument>('Donation', donationSchema);
 export default Donation;

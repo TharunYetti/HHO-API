@@ -1,13 +1,13 @@
-import express from "express";
+import express,{Request,Response} from "express";
 import mongoose from "mongoose";
-import offusers from "./Routes/offuserRoutes.js";
-import volunteerRoutes from "./Routes/volunteerRoutes.js";
+import offusers from "./Routes/offuserRoutes";
+import volunteerRoutes from "./Routes/volunteerRoutes";
 import cors from 'cors';
-import eventRoute from "./Routes/eventRoute.js";
+import eventRoute from "./Routes/eventRoute";
 const app = express();
-import testimonialRoute from "./Routes/testimonialRoute.js";
-import transactionsRoute from "./Routes/transactionRoutes.js"
-import connectToDB from "./connectDB.js";
+import testimonialRoute from "./Routes/testimonialRoute";
+import transactionsRoute from "./Routes/transactionRoutes"
+import connectToDB from "./config/connectDB";
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -19,7 +19,7 @@ connectToDB();
 
 const port = process.env.PORT;
 
-app.get("/",(req,res)=>{
+app.get("/",(req:Request,res:Response)=>{
     res.send("Working");
 })
 

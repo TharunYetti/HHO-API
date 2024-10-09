@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
-
-const feedbackSchema = new mongoose.Schema({
+const {Schema,model} = mongoose;
+import {FeedBackDocument} from "./models";
+const feedbackSchema = new Schema<FeedBackDocument>({
     name:{
         type:String,
         required:true
@@ -18,8 +19,11 @@ const feedbackSchema = new mongoose.Schema({
         required: true
     },
     date: {
-        type: String,
+        type: Date,
         required: true,
         default: Date.now
     }
 })
+
+const feedBackModel = model<FeedBackDocument>("feedbacks",feedbackSchema);
+export default feedBackModel;
