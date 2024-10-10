@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import {VolunteerDocument} from "./models";
+import {VolunteerDocument} from "../types/volunteerType";
 const volunteerSchema = new mongoose.Schema<VolunteerDocument>({
     vol_name:{
         type:String,

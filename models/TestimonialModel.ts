@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { TestimonialDocument } from "./models";
+import { TestimonialDocument } from "../types/testimonialType";
 const TestimonialSchema = new mongoose.Schema<TestimonialDocument>(
   {
     name: {

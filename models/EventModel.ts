@@ -1,5 +1,5 @@
 import mongoose, { Schema, model } from "mongoose";
-import { EventDocument } from "./models";  // Assuming this contains your EventDocument interface
+import { EventDocument } from "../types/eventType";  // Assuming this contains your EventDocument interface
 
 const eventSchema = new Schema<EventDocument>({
   eventName: {

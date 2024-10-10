@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
-import {TransactionDocument} from "./models";
+import {TransactionDocument} from "../types/transactionType";
 const TransactionsSchema = new mongoose.Schema<TransactionDocument>({
     date: {
         type: Date,
-        require: true,
+        required : true,
         default: Date.now
     },
     transaction_type: {

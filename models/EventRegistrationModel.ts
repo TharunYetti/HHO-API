@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import {EventRegistrationDocument} from "./models";
+import {EventRegistrationDocument} from "../types/eventRegistrationType";
 const EventRegistrationsSchema = new mongoose.Schema<EventRegistrationDocument>({
     name: {
         type: String,

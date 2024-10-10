@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 const { Schema, model } = mongoose;
-import { DonationDocument } from './models';
+import { DonationDocument } from '../types/donationType';
 const donationSchema = new Schema<DonationDocument>({
   name: {
     type: String,

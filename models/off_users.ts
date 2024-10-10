@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import {OffUserDocument} from "./models";
+import {OffUserDocument} from "../types/offUserType";
 const offUserSchema = new mongoose.Schema<OffUserDocument>({
     name:{
        type:String,

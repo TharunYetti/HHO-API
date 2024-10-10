@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import {SubEventDocument} from './models';
+import mongoose, {Schema, model} from "mongoose";
+import {SubEventDocument} from '../types/subEventType';
 const subEventSchema = new mongoose.Schema<SubEventDocument>({
     name:{
         type:String,
@@ -25,7 +25,7 @@ const subEventSchema = new mongoose.Schema<SubEventDocument>({
         type:String
     },
     mainEventId:{
-        type:mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref:"Events",
         required:true
     }
