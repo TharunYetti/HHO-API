@@ -1,5 +1,5 @@
 import subEventModel from "../models/SubEventModel";
-import { eventModel } from "../models/EventModel";
+import  eventModel from "../models/EventModel";
 import { Request, Response } from "express";
 export const getSubEvents = async (req: Request, res: Response) => {
   try {
@@ -14,47 +14,47 @@ export const getSubEvents = async (req: Request, res: Response) => {
   }
 };
 
-export const createSubEvent = async (req: Request, res: Response) => {
-  try {
-    const { name, description, venue, date, time, poster, mainEventId } =
-      req.body;
-    if (
-      !name ||
-      !description ||
-      !venue ||
-      !date ||
-      !time ||
-      !poster ||
-      !mainEventId
-    ) {
-      res.status(400).send("All fields are required");
-    } else {
-      const subEvent = await subEventModel.create({
-        name,
-        description,
-        venue,
-        date,
-        time,
-        poster,
-        mainEventId,
-      });
-      const exists = await eventModel.findById(subEvent.mainEventId);
-      if (exists) {
-        exists.preEvents.push(subEvent._id);
-        exists.save();
-        res.status(200).send(subEvent);
-      } else {
-        res.status(400).send("Event not found");
-      }
-    }
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      res.status(400).send(error.message);
-    } else {
-      res.status(400).send("Unknown error occurred");
-    }
-  }
-};
+// export const createSubEvent = async (req: Request, res: Response) => {
+//   try {
+//     const { name, description, venue, date, time, poster, mainEventId } =
+//       req.body;
+//     if (
+//       !name ||
+//       !description ||
+//       !venue ||
+//       !date ||
+//       !time ||
+//       !poster ||
+//       !mainEventId
+//     ) {
+//       res.status(400).send("All fields are required");
+//     } else {
+//       const subEvent = await subEventModel.create({
+//         name,
+//         description,
+//         venue,
+//         date,
+//         time,
+//         poster,
+//         mainEventId,
+//       });
+//       const exists = await eventModel.findById(subEvent.mainEventId);
+//       if (exists) {
+//         exists.preEvents.push(subEvent._id);
+//         exists.save();
+//         res.status(200).send(subEvent);
+//       } else {
+//         res.status(400).send("Event not found");
+//       }
+//     }
+//   } catch (error: unknown) {
+//     if (error instanceof Error) {
+//       res.status(400).send(error.message);
+//     } else {
+//       res.status(400).send("Unknown error occurred");
+//     }
+//   }
+// };
 
 export const updateSubEvent = async (req: Request, res: Response) => {
   try {

@@ -1,8 +1,9 @@
 import express from "express";
-import { getSubEvents,createSubEvent,updateSubEvent,deleteSubEvent } from "../Controllers/subEventController";
+import { getSubEvents,updateSubEvent,deleteSubEvent } from "../Controllers/subEventController";
+// import {createSubEvent} from "../Controllers/subEventController"
 const router = express.Router();
 router.get("/:id", getSubEvents)
-router.post("/create", createSubEvent);
+// router.post("/create", createSubEvent);
 
 router.put("/update/:id",updateSubEvent );
 

@@ -21,4 +21,4 @@ const TransactionsSchema = new mongoose.Schema<TransactionDocument>({
     }
 });
 
-export const transactions =  mongoose.model<TransactionDocument>("transactions",TransactionsSchema);
+export const TransactionModel =  mongoose.model<TransactionDocument>("transactions",TransactionsSchema);

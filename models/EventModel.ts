@@ -33,4 +33,4 @@ const eventSchema = new Schema<EventDocument>({
   timestamps: true
 });
 
-export const eventModel = model<EventDocument>("Event", eventSchema);
+export default  model<EventDocument>("Event", eventSchema);

@@ -6,7 +6,7 @@ import {
   deleteEvent,
 } from "../Controllers/eventController";
 import { middleware } from "../middleware/middleware"; 
-import { eventModel } from "../models/EventModel";
+import  eventModel  from "../models/EventModel";
 import subEventModel from "../models/SubEventModel";
 
 const router = express.Router();
