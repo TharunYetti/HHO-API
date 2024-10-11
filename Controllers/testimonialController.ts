@@ -1,87 +1,68 @@
 import TestimonialModel from "../models/TestimonialModel";
 import { Request, Response } from "express";
-export const getTestimonial = async (req: Request, res: Response) => {
-  try {
-    const testimonials = await TestimonialModel.find();
-    res.send(testimonials);
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      res.status(400).send(error.message);
-    }
-    else{
-      res.status(400).send("Unknown error")
-    }
-  }
-};
+import { TestimonialDocument } from "../types/testimonialType";
+import testimonialService from "../Services/TestimonialService";
 
-export const createTestimonial = async (req: Request, res: Response) => {
-  try {
-    const { name, message, rating, discipline } = req.body;
-    if (!name || !message || !rating || !discipline) {
-      res.status(400).send("All fields are mandatory");
-    } else {
-      const testimonial = await TestimonialModel.create({
-        name,
-        message,
-        rating,
-        discipline,
-      });
-      res.status(200).send(testimonial);
-    }
-  } catch (error:unknown) {
-    if(error instanceof Error){
-    res.status(400).send(error.message);
-    }else{
-      res.status(400).send("Unknown Error")
-    }
-  }
-};
+class TestimonialController {
 
-export const updateTestimonial = async (req: Request, res: Response) => {
-  try {
-    const id = req.params.id;
-    let { name, message, rating, discipline } = req.body;
-    const testimonial = await TestimonialModel.findById(id);
-    if (!testimonial) {
-      res.status(400).send("Testimonial not found");
-    } else {
-      name = name || testimonial.name;
-      message = message || testimonial.message;
-      rating = rating || testimonial.rating;
-      discipline = discipline || testimonial.discipline;
-      const updatedTestimonial = await TestimonialModel.findByIdAndUpdate(id, {
-        name,
-        message,
-        rating,
-        discipline,
-      });
-      res.status(200).send(updatedTestimonial);
-    }
-  } catch (error:unknown) {
-    if(error instanceof Error){
-    res.status(400).send(error.message);
-    }else{
-      res.status(400).send("Unknown Error");
+  // Create a new testimonial
+  async createTestimonial(req: Request, res: Response) {
+    const testimonialData: Partial<TestimonialDocument> = req.body;
+    try {
+      const testimonial = await testimonialService.createTestimonial(testimonialData);
+      res.status(200).json(testimonial);
+    } catch (error) {
+      res.status(500).json({ message: "Error creating testimonial", error });
     }
   }
-};
 
-export const deleteTestimonial = async (req: Request, res: Response) => {
-  try {
-    const id = req.params.id;
-    const testimonial = await TestimonialModel.findById(id);
-    if (!testimonial) {
-      res.status(400).send("Testimonial Not found");
-    } else {
-      await TestimonialModel.findByIdAndDelete(id);
-      res.status(200).send("Successfully Deleted");
-    }
-  } catch (error:unknown) {
-    if(error instanceof Error){
-    res.status(400).send(error.message);
-    }
-    else{
-      res.status(400).send("Unknown error");
+  // Delete a testimonial by ID
+  async deleteTestimonial(req: Request, res: Response) {
+    console.log("Into the controller");
+    try {
+      const deletedTestimonial = await testimonialService.deleteTestimonial(req.params.id);
+      res.status(200).json(deletedTestimonial);
+    } catch (err) {
+      res.status(500).json({ message: "Error deleting testimonial", err });
     }
   }
-};
+
+  // Update an existing testimonial
+  async updateTestimonial(req: Request, res: Response) {
+    console.log("Into the controller");
+    const { id } = req.params;
+    const testimonialData: Partial<TestimonialDocument> = req.body;
+    try {
+      const updatedTestimonial = await testimonialService.updateTestimonial(id, testimonialData);
+      res.status(200).json(updatedTestimonial);
+    } catch (err) {
+      res.status(500).json({ message: "Error updating testimonial", err });
+    }
+  }
+
+  // Get all testimonials
+  async getAllTestimonials(req: Request, res: Response) {
+    console.log("Into the controller");
+    try {
+      const testimonials = await testimonialService.getAllTestimonials();
+      res.status(200).json(testimonials);
+    } catch (error) {
+      res.status(500).json({ message: "Error retrieving testimonials", error });
+    }
+  }
+
+  // Search for testimonials by a specific term
+  async getMatchedTestimonials(req: Request, res: Response) {
+    console.log("Into the controller");
+    const searchTerm = req.query.searchTerm as string;
+    console.log(searchTerm);
+    try {
+      const matchedTestimonials = await testimonialService.getMatchedTestimonials(searchTerm);
+      res.status(200).json(matchedTestimonials);
+    } catch (error) {
+      res.status(500).json({ message: "Error retrieving matched testimonials", error });
+    }
+  }
+}
+
+export default new TestimonialController();
