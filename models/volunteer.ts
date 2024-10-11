@@ -23,4 +23,4 @@ const volunteerSchema = new mongoose.Schema<VolunteerDocument>({
     }
 })
 
-export const volunterModel =  mongoose.model<VolunteerDocument>('volunteers',volunteerSchema);
+export default  mongoose.model<VolunteerDocument>('volunteers',volunteerSchema);

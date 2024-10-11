@@ -20,6 +20,6 @@ const offUserSchema = new mongoose.Schema<OffUserDocument>({
 })
 
 
-export const offUserModel = mongoose.model<OffUserDocument>('offusers',offUserSchema);
+export default mongoose.model<OffUserDocument>('offusers',offUserSchema);
 
 
