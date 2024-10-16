@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
-import { offUserModel } from "../models/off_users";
+import  offUserModel  from "../models/off_users";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
-
+import { OffUserDocument } from "../types/offUserType";
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY as string;
 
 interface IPayload {
   user: {
-    id: mongoose.Types.ObjectId;
+    id: string;
     role: string;
   };
 }
@@ -15,7 +15,7 @@ interface IPayload {
 export const offUserLogin = async (
   req: Request,
   res: Response
-): Promise<void> => {
+)=> {
   try {
     const { email, password } = req.body;
 
@@ -23,7 +23,7 @@ export const offUserLogin = async (
        res.json({ Error: "True", Message: "All Fields Required..." });
     }
 
-    const userExist = await offUserModel.findOne({ email });
+    const userExist = await offUserModel.findOne({ email }) as OffUserDocument;
 
     if (!userExist) {
       res.json({
@@ -38,10 +38,9 @@ export const offUserLogin = async (
         Message: "Login with Valid Credentials...",
       });
     }
-
     const payload: IPayload = {
       user: {
-        id: userExist._id,
+        id: String(userExist._id),
         role: userExist.role,
       },
     };

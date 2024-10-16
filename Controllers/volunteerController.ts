@@ -1,4 +1,4 @@
-import { volunterModel } from "../models/volunteer";
+import volunterModel  from "../models/volunteer";
 import mongoose from "mongoose";
 import { Request, Response } from "express";
 export const volunteerRegistration = async (
