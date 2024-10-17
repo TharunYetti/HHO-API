@@ -1,10 +1,10 @@
 import express from "express";
-import { createDonation,updateDonation,deleteDonation,getAllDonations} from "../Controllers/donationController";
+import donationController from "../Controllers/donationController";
 const router = express.Router();
 
 
-router.post("/create", createDonation);
-router.post("/update/:id",updateDonation);
-router.post("/delete/:id",deleteDonation);
-router.get("/getall",getAllDonations); 
+router.post("/create", donationController.createDonation);
+router.post("/update",donationController.updateDonation);
+router.post("/delete/:id",donationController.deleteDonation);
+router.get("/getall",donationController.getAllDonations); 
 export default router;
