@@ -25,7 +25,7 @@ app.get("/",(req:Request,res:Response)=>{
 
 app.use("/api/event",eventRoute);
 app.use('/api/users/offusers',offusers);
-app.use('/api/volunteers',volunteerRoutes);
+app.use('/api/volunteer',volunteerRoutes);
 app.use('/api/transaction',transactionsRoute);
 app.use("/api/testimonial",testimonialRoute);
 
