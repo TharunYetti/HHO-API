@@ -50,9 +50,10 @@ class TransactionController{
   async getMatchedTransactions(req: Request, res: Response){
     console.log("Into the controller");
     const searchTerm = req.query.searchTerm as string;
+    const filterBy = req.query.filterBy as string;
     console.log(searchTerm);
     try{
-      const transactions = await transactionService.getMacthedTransactions(searchTerm);
+      const transactions = await transactionService.getMacthedTransactions(searchTerm,filterBy);
       res.status(200).json(transactions);
     }catch(error){
       res.status(500).json({ message: "Error retrieving macthed transactions", error });

@@ -39,11 +39,11 @@ class TransactionService{
             return null;
         }
     }
-    async getMacthedTransactions(searchTerm: string): Promise<TransactionDocument[]|null>{
+    async getMacthedTransactions(searchTerm: string,filterBy: string): Promise<TransactionDocument[]|null>{
         console.log("Into the service");
         console.log(searchTerm);
         try{
-            return await transactionRepository.getMatched(searchTerm) 
+            return await transactionRepository.getMatched(searchTerm,filterBy) ;
         }catch(err){
             console.error("Error in getting matched transactions:",err);
         }
