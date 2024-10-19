@@ -1,10 +1,14 @@
 import { Request, Response } from "express";
-import  offUserModel  from "../models/off_users";
+import offUserModel from "../models/off_users";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import offUserService from "../Services/OffUserService";
 import { OffUserDocument } from "../types/offUserType";
+import dotenv from  'dotenv';
+dotenv.config()
+
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY as string;
+console.log(JWT_SECRET_KEY)
 
 interface IPayload {
   user: {
