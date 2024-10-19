@@ -1,8 +1,7 @@
 import express from "express";
 const router = express.Router();
-import {offUserLogin} from "../Controllers/offUserController";
+import offUserController from "../Controllers/offUserController";
 
-router.post("/login", offUserLogin)
-
+router.post("/login", offUserController.login)
 
 export default router
