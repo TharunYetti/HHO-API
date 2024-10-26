@@ -1,4 +1,5 @@
 import offUserModel from "../models/off_users";
+import OffUserRepo from "../Repository/OffUserRepo";
 import { OffUserDocument } from "../types/offUserType";
 import jwt, { Jwt } from "jsonwebtoken";
 
@@ -62,6 +63,17 @@ class OffUserService{
             throw error;  // Pass the error to the controller to handle
           }
     }
+
+    async getUserData(id: string): Promise<OffUserDocument>{
+      try{
+          console.log(id);
+          return await OffUserRepo.get(id);
+      }catch(error){
+        console.error("Getting data error :", error);
+        throw error;  // Pass the error to the controller to handle
+      }
+    }
+
 }
 
 export default new OffUserService();
