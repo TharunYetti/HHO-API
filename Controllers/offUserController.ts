@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import offUserService from "../Services/OffUserService";
 import { OffUserDocument } from "../types/offUserType";
+import offUserService from "../Services/OffUserService";
 import dotenv from  'dotenv';
 dotenv.config()
 
