@@ -13,17 +13,17 @@ declare module "express-serve-static-core" {
   }
 }
 
-export const middleware = (req: Request, res: Response, next: NextFunction) => {
+export const middleware = (req: Request, res: Response, next: NextFunction):void => {
   try {
     const authHeader = req.headers['authorization']; 
     if (!authHeader) {
-      return res.status(401).json({ message: "Authorization header missing" });
+       res.status(401).json({ message: "Authorization header missing" });
     }
 
     const token = authHeader.split(' ')[1]; 
 
     if (!token) {
-      return res.status(401).json({ message: "Token not found" });
+       res.status(401).json({ message: "Token not found" });
     }
 
     const decoded = jwt.verify(token, JWT_SECRET_KEY); 
@@ -33,9 +33,9 @@ export const middleware = (req: Request, res: Response, next: NextFunction) => {
     next(); 
   } catch (error: unknown) {
     if (error instanceof Error) {
-      return res.status(403).json({ message: "Invalid token", error: error.message });
+       res.status(403).json({ message: "Invalid token", error: error.message });
     } else {
-      return res.status(500).json({ message: "An unknown error occurred in middleware" });
+       res.status(500).json({ message: "An unknown error occurred in middleware" });
     }
   }
 };

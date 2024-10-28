@@ -5,7 +5,7 @@ import transactionService from "../Services/TransactionService";
 import { TransactionDocument } from "../types/transactionType";
 
 class TransactionController{
-  async createTransaction(req: Request, res: Response){
+  async createTransaction(req: Request, res: Response) :Promise<void>{
     const transactionData = req.body;
     try{
       const transaction = await transactionService.createTransaction(transactionData);
@@ -27,7 +27,7 @@ class TransactionController{
 
   async updateTransaction(req: Request, res: Response){
     console.log("Into the controller");
-    const {id} = req.body;
+    const {id} = req.params;
     const transactionData = req.body;
     try{
       const trsn = await transactionService.updateTransaction(id,transactionData);
