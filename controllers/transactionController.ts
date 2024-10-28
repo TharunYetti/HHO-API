@@ -1,7 +1,7 @@
 import { TransactionModel } from "../models/TransactionModel";
 import mongoose from "mongoose";
 import { Request, Response } from "express";
-import transactionService from "../Services/TransactionService";
+import transactionService from "../services/TransactionService";
 import { TransactionDocument } from "../types/transactionType";
 
 class TransactionController{

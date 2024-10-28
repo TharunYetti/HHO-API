@@ -1,4 +1,4 @@
-import transactionRepository from "../Repository/transactionRepo"
+import transactionRepository from "../repository/transactionRepo"
 import  { TransactionDocument } from "../types/transactionType";
 
 class TransactionService{

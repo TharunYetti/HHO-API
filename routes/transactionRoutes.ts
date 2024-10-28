@@ -1,6 +1,6 @@
 import express from "express";
 // import { createTransaction, deleteTransaction, getAllTransactions, getMatchedTransactions, updateTransaction } from "../Controllers/transactionController";
-import transactionController from "../Controllers/transactionController";
+import transactionController from "../controllers/transactionController";
 import { middleware } from "../middleware/middleware";
 const router = express.Router();
 

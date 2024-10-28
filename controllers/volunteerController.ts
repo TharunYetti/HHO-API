@@ -1,7 +1,7 @@
 import volunterModel  from "../models/volunteer";
 import mongoose from "mongoose";
 import { Request, Response } from "express";
-import volunteerService from "../Services/VolunteerService";
+import volunteerService from "../services/VolunteerService";
 
 class VolunteerController{
   async createVolunteer(req: Request, res: Response){

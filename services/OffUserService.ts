@@ -1,5 +1,5 @@
 import offUserModel from "../models/off_users";
-import OffUserRepo from "../Repository/OffUserRepo";
+import OffUserRepo from "../repository/OffUserRepo";
 import { OffUserDocument } from "../types/offUserType";
 import jwt, { Jwt } from "jsonwebtoken";
 

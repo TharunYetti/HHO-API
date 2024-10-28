@@ -1,7 +1,7 @@
 import Donation from "../models/DonationModel";
 import { Request, Response } from "express";
 import { DonationDocument } from "../types/donationType";
-import donationService from "../Services/DonationService";
+import donationService from "../services/DonationService";
 
 class DonationController{
 

@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 
-import testimonialController from "../Controllers/testimonialController";
+import testimonialController from "../controllers/testimonialController";
 
 router.get("/", testimonialController.getAllTestimonials);
 router.post("/createTestimonial", testimonialController.createTestimonial);

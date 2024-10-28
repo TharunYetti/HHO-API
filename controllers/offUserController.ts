@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import offUserModel from "../models/off_users";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
-import offUserService from "../Services/OffUserService";
+import offUserService from "../services/OffUserService";
 import { OffUserDocument } from "../types/offUserType";
 import dotenv from  'dotenv';
 dotenv.config()
