@@ -1,4 +1,4 @@
-import donationRepository from "../Repository/DonationRepo";
+import donationRepository from "../repository/DonationRepo";
 import { DonationDocument } from "../types/donationType";
 
 class DonationService{

@@ -1,7 +1,7 @@
 import  eventModel  from "../models/EventModel";
 import subEventModel from "../models/SubEventModel";
 import { Request, Response } from "express";
-import eventService from "../Services/EventService";
+import eventService from "../services/EventService";
 import { EventDocument } from "../types/eventType";
 
 class EventController {

@@ -1,5 +1,5 @@
 import { error } from "console";
-import volunteerRepository from "../Repository/VolunteerRepo";
+import volunteerRepository from "../repository/VolunteerRepo";
 import { VolunteerDocument } from "../types/volunteerType";
 
 class VolunteerService{

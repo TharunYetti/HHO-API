@@ -1,5 +1,5 @@
 import express from "express";
-import donationController from "../Controllers/donationController";
+import donationController from "../controllers/donationController";
 const router = express.Router();
 
 

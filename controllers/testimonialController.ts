@@ -1,7 +1,7 @@
 import TestimonialModel from "../models/TestimonialModel";
 import { Request, Response } from "express";
 import { TestimonialDocument } from "../types/testimonialType";
-import testimonialService from "../Services/TestimonialService";
+import testimonialService from "../services/TestimonialService";
 
 class TestimonialController {
 

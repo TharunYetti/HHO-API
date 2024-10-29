@@ -1,4 +1,4 @@
-import testimonialRepository from "../Repository/testimonialRepo";
+import testimonialRepository from "../repository/testimonialRepo";
 import { TestimonialDocument } from "../types/testimonialType";
 
 class TestimonialService {

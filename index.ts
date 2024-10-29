@@ -3,13 +3,13 @@ dotenv.config();
 
 import express,{Request,Response} from "express";
 import mongoose from "mongoose";
-import offusers from "./Routes/offuserRoutes";
-import volunteerRoutes from "./Routes/volunteerRoutes";
+import offusers from "./routes/offuserRoutes";
+import volunteerRoutes from "./routes/volunteerRoutes";
 import cors from 'cors';
-import eventRoute from "./Routes/eventRoute";
+import eventRoute from "./routes/eventRoute";
 const app = express();
-import testimonialRoute from "./Routes/testimonialRoute";
-import transactionsRoute from "./Routes/transactionRoutes"
+import testimonialRoute from "./routes/testimonialRoute";
+import transactionsRoute from "./routes/transactionRoutes"
 import connectToDB from "./config/connectDB";
 import { errorHandler } from "./middleware/errorHandler";
 
