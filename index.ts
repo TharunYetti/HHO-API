@@ -11,6 +11,7 @@ const app = express();
 import testimonialRoute from "./routes/testimonialRoute";
 import transactionsRoute from "./routes/transactionRoutes"
 import activityRoute from "./routes/activityRoutes"
+import donationRoute from "./routes/donationRoutes"
 import connectToDB from "./config/connectDB";
 import { errorHandler } from "./middleware/errorHandler";
 
@@ -31,6 +32,7 @@ app.use('/api/volunteer',volunteerRoutes);
 app.use('/api/transaction',transactionsRoute);
 app.use("/api/testimonial",testimonialRoute);
 app.use("/api/activities",activityRoute);
+app.use("/api/donations",donationRoute);
 
 app.use(errorHandler);
 

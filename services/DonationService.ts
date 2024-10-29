@@ -1,25 +1,30 @@
 import donationRepository from "../repository/DonationRepo";
 import { DonationDocument } from "../types/donationType";
 
+interface DonationResponse{
+    data: DonationDocument|null,
+    message: string
+}
+
 class DonationService{
-    async createDonation(donationData: Partial<DonationDocument>): Promise<DonationDocument|null>{
+    async createDonation(donationData: Partial<DonationDocument>): Promise<DonationResponse>{
         try{
 
-            const { name, title, description,amt, date} = donationData;
-            if (!name || !title || !description || !amt || !date) {
-                // res.json({ Error: "True", Message: "All Fields are required..." });
-                throw new Error("Ensure to enter every field");
+            const { name, title, description,amt} = donationData;
+            if (!name || !title || !description || !amt) {
+                return {data:null,message:"Ensure to enter every field"}
             }
             const donationExist = await donationRepository.findBy({name:name, title:title, description: description, amt:amt});
             console.log(donationExist);
             if (donationExist) {
-                throw new Error("Ensure not to have redundant data");
+                return {data:null,message:"Already exist"}
             }
 
-            return await donationRepository.create(donationData);
+            const donation =  await donationRepository.create(donationData);
+            return {data:donation,message:"Successfully created donation"}
         }catch(err){
             console.log("Error while creating donation in service layer\nError:",err.message);
-            return null;
+            return {data:null,message:"Error while creating donation in service layer"};
         }
     }
     async deleteDonation(id: string): Promise<DonationDocument|null>{
