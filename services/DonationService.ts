@@ -6,7 +6,7 @@ class DonationService{
         try{
 
             const { name, title, description,amt, date} = donationData;
-            if (name || title || description || amt || date) {
+            if (!name || !title || !description || !amt || !date) {
                 // res.json({ Error: "True", Message: "All Fields are required..." });
                 throw new Error("Ensure to enter every field");
             }
