@@ -6,8 +6,9 @@ class ActivityController{
     async createActivity(req: Request,res: Response ){
         const activityData: Partial<ActivityDocument> = req.body;
         try{
-            const activity = activityService.createActivity(activityData);
-            res.status(200).json(activity);
+            const activityResp = await activityService.createActivity(activityData);
+            console.log(activityResp);
+            res.status(200).json(activityResp);
         }catch(error){
             res.status(500).json({ message: "Error creating donation", error });
         }
@@ -15,7 +16,8 @@ class ActivityController{
     async getAllActivities(req: Request, res:Response){
         try {
             const activities = await activityService.getAll();
-            res.status(200).json(activities);
+            // res.status(200).json(activities);
+            res.status(200).json({data:activities,message:"Successfully retrieved all the activities"});
           } catch (error) {
             res.status(500).json({ message: "Error fetching donations", error });
           }
@@ -25,6 +27,7 @@ class ActivityController{
         const activityData = req.body;
         try{
             const updatedActivity = await activityService.updateActivity(req.params.id, activityData);
+            // res.status(200).json(updatedActivity);
             res.status(200).json(updatedActivity);
         }catch(error){
             res.status(500).json({ message: "Error updating donation", error });
@@ -35,9 +38,9 @@ class ActivityController{
         const { id } = req.params;
         try {
             await activityService.deleteActivity(req.params.id);
-        res.status(200).json({ message: "Activity successfully deleted" });
+            res.status(200).json({message: "Activity successfully deleted" });
         } catch (error) {
-        res.status(500).json({ message: "Error deleting activit", error });
+        res.status(500).json({ message: "Error deleting activity", error });
         }
     }
 

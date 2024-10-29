@@ -1,23 +1,28 @@
 import { ActivityDocument } from "../types/activityType";
 import activityRepo from "../repository/ActivityRepo";
 
+interface ActivityResponse {
+    data: ActivityDocument | null;
+    message: string;
+}
+
 class ActivityService{
-    async createActivity(activityData:Partial<ActivityDocument>):Promise<ActivityDocument|null>{
+    async createActivity(activityData:Partial<ActivityDocument>):Promise<ActivityResponse>{
         try{
             const {name,description,image} = activityData;
-            if(!name || !description){
-                throw new Error("Ensure to enter required field");
+            if(!name || !description || !image){
+                return {data:null,message:"Enter all required fields"}
             }
-
-            const activity = activityRepo.findBy({name:name,description:description});
+            const activity = await activityRepo.findBy({name:name,description:description,image:image});
             if(activity){
-                throw new Error("Activity already exist");
+                return {data:null,message:"Activity already exist"};
             }
-            return await activityRepo.create(activityData);
+            const activityNew = await activityRepo.create(activityData);
+            return {data:activityNew,message:"Successfully created activity"};
 
         }catch(error){
             console.log("Error while creating activity in service layer\nError:",error.message);
-            return null;
+            return {data:null,message:"Error while creating activity in service layer"};
         }
     }
 
@@ -39,16 +44,17 @@ class ActivityService{
         }
     }
 
-    async updateActivity(id: string,activityData:Partial<ActivityDocument>):Promise<ActivityDocument|null>{
+    async updateActivity(id: string,activityData:Partial<ActivityDocument>):Promise<ActivityResponse>{
         try{
             const activityExist = activityRepo.get(id);
             if(!activityExist){
-                throw new Error("Activity with given Id doesn't exist");
+                return {data:null,message:"Activity already exist"};
             }
-            return await activityRepo.update(id,activityData);
+            const activityUpdated =  await activityRepo.update(id,activityData);
+            return {data:activityUpdated,message:"Successfully updated the activity"};
         }catch(error){
             console.log("Error while updating activity in service layer\nError:",error.message);
-            return null;
+            return {data:null,message:"Error while creating activity in service layer"};
         }
     }
 
