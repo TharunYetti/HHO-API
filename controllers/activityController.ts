@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import activityService from "../services/ActivityService";
 import { ActivityDocument } from "../types/activityType";
+import { NotFoundError, ValidationError } from "../exceptions/CustomError";
 
 class ActivityController{
     async createActivity(req: Request,res: Response ){
@@ -8,9 +9,13 @@ class ActivityController{
         try{
             const activityResp = await activityService.createActivity(activityData);
             console.log(activityResp);
-            res.status(200).json(activityResp);
+            res.status(200).json({success:true,activityResp});
         }catch(error){
-            res.status(500).json({ message: "Error creating donation", error });
+            if(error instanceof ValidationError){
+                res.status(400).json({success:false,message:error.message});
+              }else{
+                res.status(500).json({success:false, message: "Error adding activity", error });
+              }
         }
     }
     async getAllActivities(req: Request, res:Response){
@@ -27,10 +32,15 @@ class ActivityController{
         const activityData = req.body;
         try{
             const updatedActivity = await activityService.updateActivity(req.params.id, activityData);
-            // res.status(200).json(updatedActivity);
-            res.status(200).json(updatedActivity);
-        }catch(error){
-            res.status(500).json({ message: "Error updating donation", error });
+            res.status(200).json({success:true,updatedActivity});
+        }catch(err){
+            if(err instanceof NotFoundError){
+                res.status(404).json({success:false,message:err.message});
+              }else if(err instanceof ValidationError){
+                res.status(400).json({success:false,message:err.message});
+              }else{
+                res.status(500).json({success:false,message: "Error in updating activity",err});
+              }
         }
     }
 
@@ -38,9 +48,15 @@ class ActivityController{
         const { id } = req.params;
         try {
             await activityService.deleteActivity(req.params.id);
-            res.status(200).json({message: "Activity successfully deleted" });
-        } catch (error) {
-        res.status(500).json({ message: "Error deleting activity", error });
+            res.status(200).json({success:true,message: "Activity successfully deleted" });
+        } catch (err) {
+            if(err instanceof NotFoundError){
+                res.status(404).json({success:false,message:err.message});
+              }else if(err instanceof ValidationError){
+                res.status(400).json({success:false,message:err.message});
+              }else{
+                res.status(500).json({ success:false,message: "Error in deleting activity", err });
+              }
         }
     }
 

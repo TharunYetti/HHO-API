@@ -1,48 +1,33 @@
+import { ConflictError, NotFoundError } from "../exceptions/CustomError";
 import donationRepository from "../repository/DonationRepo";
 import { DonationDocument } from "../types/donationType";
 
-interface DonationResponse{
-    data: DonationDocument|null,
-    message: string
-}
-
 class DonationService{
-    async createDonation(donationData: Partial<DonationDocument>): Promise<DonationResponse>{
-        try{
-
-            const { name, title, description,amt} = donationData;
-            if (!name || !title || !description || !amt) {
-                return {data:null,message:"Ensure to enter every field"}
-            }
-            const donationExist = await donationRepository.findBy({name:name, title:title, description: description, amt:amt});
-            console.log(donationExist);
-            if (donationExist) {
-                return {data:null,message:"Already exist"}
-            }
-
-            const donation =  await donationRepository.create(donationData);
-            return {data:donation,message:"Successfully created donation"}
-        }catch(err){
-            console.log("Error while creating donation in service layer\nError:",err.message);
-            return {data:null,message:"Error while creating donation in service layer"};
+    async createDonation(donationData: Partial<DonationDocument>): Promise<DonationDocument|null>{
+        const { name, title, description,amt} = donationData;
+        const donationExist = await donationRepository.findBy({name:name, title:title, description: description, amt:amt});
+        console.log(donationExist);
+        if (donationExist) {
+            throw new ConflictError("Donation already exist, enter carefully");
         }
+
+        const donation =  await donationRepository.create(donationData);
+        return donation;
     }
     async deleteDonation(id: string): Promise<DonationDocument|null>{
-        try{
-            return await donationRepository.delete(id);
-        }catch(err){
-            console.log("Error while deleting donation in service layer");
-            return null;
+        const result = await donationRepository.delete(id);
+        if(!result){
+            throw new NotFoundError("Donation is not found");
         }
+        return result;
     }
 
     async updateDonation(id: string, donationData: Partial<DonationDocument>): Promise<DonationDocument|null>{
-        try{
-            return await donationRepository.update(id,donationData);
-        }catch(error){
-            console.error("Error updating donation:", error);
-            return null;
+        const result = await donationRepository.update(id,donationData);
+        if(!result){
+            throw new NotFoundError("Donation is not found");
         }
+        return result;
     }
     async getAllDonations(): Promise<DonationDocument[]|null>{
         // console.log("Into the service");

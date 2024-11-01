@@ -1,5 +1,6 @@
 import { ActivityDocument } from "../types/activityType";
 import activityRepo from "../repository/ActivityRepo";
+import { ConflictError, NotFoundError, ValidationError } from "../exceptions/CustomError";
 
 interface ActivityResponse {
     data: ActivityDocument | null;
@@ -7,23 +8,17 @@ interface ActivityResponse {
 }
 
 class ActivityService{
-    async createActivity(activityData:Partial<ActivityDocument>):Promise<ActivityResponse>{
-        try{
+    async createActivity(activityData:Partial<ActivityDocument>):Promise<ActivityDocument|null>{
             const {name,description,image} = activityData;
             if(!name || !description || !image){
-                return {data:null,message:"Enter all required fields"}
+                throw new ValidationError("Ensure to enter every field");
             }
             const activity = await activityRepo.findBy({name:name,description:description,image:image});
             if(activity){
-                return {data:null,message:"Activity already exist"};
+                throw new ConflictError("Activity already exist");
             }
             const activityNew = await activityRepo.create(activityData);
-            return {data:activityNew,message:"Successfully created activity"};
-
-        }catch(error){
-            console.log("Error while creating activity in service layer\nError:",error.message);
-            return {data:null,message:"Error while creating activity in service layer"};
-        }
+            return activityNew;
     }
 
     async getActivity(id:string):Promise<ActivityDocument>{
@@ -44,28 +39,20 @@ class ActivityService{
         }
     }
 
-    async updateActivity(id: string,activityData:Partial<ActivityDocument>):Promise<ActivityResponse>{
-        try{
-            const activityExist = activityRepo.get(id);
-            if(!activityExist){
-                return {data:null,message:"Activity already exist"};
-            }
+    async updateActivity(id: string,activityData:Partial<ActivityDocument>):Promise<ActivityDocument|null>{
             const activityUpdated =  await activityRepo.update(id,activityData);
-            return {data:activityUpdated,message:"Successfully updated the activity"};
-        }catch(error){
-            console.log("Error while updating activity in service layer\nError:",error.message);
-            return {data:null,message:"Error while creating activity in service layer"};
-        }
+            if(!activityUpdated){
+                throw new NotFoundError("Activity with given id not found");
+            }
+            return activityUpdated;
     }
 
     async deleteActivity(id:string):Promise<ActivityDocument|null>{
-        try{
-            const activity = this.getActivity(id);
-            return await activityRepo.delete(id);
-        }catch(error){
-            console.log("Error while deleting activity in service layer\nError:",error.message);
-            return null;
+        const result = await activityRepo.delete(id);
+        if(!result){
+            throw new NotFoundError("Activity with given Id not found");
         }
+        return result;
     }
 
 }
