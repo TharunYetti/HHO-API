@@ -2,11 +2,6 @@ import { ConflictError, NotFoundError } from "../exceptions/CustomError";
 import donationRepository from "../repository/DonationRepo";
 import { DonationDocument } from "../types/donationType";
 
-interface DonationResponse{
-    data: DonationDocument|null,
-    message: string
-}
-
 class DonationService{
     async createDonation(donationData: Partial<DonationDocument>): Promise<DonationDocument|null>{
         const { name, title, description,amt} = donationData;

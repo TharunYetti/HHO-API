@@ -46,9 +46,16 @@ class OffUserController{
     try{
       const uid = req.params.id;
       const userExist = await offUserModel.findByIdAndUpdate(uid,req.body);
-      res.status(200).json({message:"success"});
+      if(!userExist){
+        throw new NotFoundError("User with given Id not found");
+      }
+      res.status(200).json({success:true,userExist});
     }catch(e){
-      res.status(400).json(e);
+      if(e instanceof NotFoundError){
+        res.status(404).json({success:false,message:e.message});
+      }else{
+        res.status(400).json(e);
+      }
     }
   }
     async getUserData(req: Request, res: Response){
