@@ -30,11 +30,14 @@ export const middleware = (roles:string[]) =>{
       const decoded = jwt.verify(token, JWT_SECRET_KEY); 
 
       req.user = decoded;
+      if (!roles.includes(req.user.user.role)) {
+        res.status(403).json({ message: "Access denied" });
+      }
     
       next(); 
     } catch (error: unknown) {
       if (error instanceof Error) {
-         res.status(403).json({ message: "Invalid token", error: error.message });
+         res.status(403).json({ message: "Unauhtorized/Invalid token", error: error.message });
       } else {
          res.status(500).json({ message: "An unknown error occurred in middleware" });
       }
