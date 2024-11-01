@@ -1,27 +1,23 @@
 import { error } from "console";
 import volunteerRepository from "../repository/VolunteerRepo";
 import { VolunteerDocument } from "../types/volunteerType";
+import { ConflictError, ValidationError } from "../exceptions/CustomError";
 
 class VolunteerService{
     async createVolunteer(volunteerData: Partial<VolunteerDocument>): Promise<VolunteerDocument|null>{
-        try{
-
             const { vol_email, vol_name, vol_phNo, vol_id, vol_evtName } = volunteerData;
             if (!vol_email || !vol_name || !vol_phNo || !vol_id || !vol_evtName) {
                 // res.json({ Error: "True", Message: "All Fields are required..." });
-                throw new Error("Ensure to enter every field");
+                throw new ValidationError("Ensure to enter every field");
             }
             const volunteerExist = await volunteerRepository.findBy({ vol_email:vol_email });
             console.log(volunteerExist);
             if (volunteerExist) {
-                throw new Error("Already Registered for this Event...");
+                throw new ConflictError("Already Registered for this Event...");
             }
 
             return await volunteerRepository.create(volunteerData);
-        }catch(err){
-            console.log("Error while creating volunteer in service layer\nError:",err.message);
-            return null;
-        }
+        
     }
     async deleteVolunteer(id: string): Promise<VolunteerDocument|null>{
         try{
