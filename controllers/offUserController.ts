@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import offUserService from "../services/OffUserService";
 import { OffUserDocument } from "../types/offUserType";
 import dotenv from  'dotenv';
+import { NotFoundError, ValidationError } from "../exceptions/CustomError";
 dotenv.config()
 
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY as string;
@@ -23,7 +24,13 @@ class OffUserController{
       const token = await offUserService.login(req.body);
       res.json({ success: true, token });
     } catch (error) {
-      res.status(400).json({ success: false, message: error.message });
+      if(error instanceof NotFoundError){
+        res.status(404).json({success:false,message:error.message});
+      }else if(error instanceof ValidationError){
+        res.status(400).json({success:false,message:error.message});
+      }else{
+        res.status(500).json({success:false,message: "Error in updating transaction",error});
+      }
     }
 
   }

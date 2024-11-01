@@ -1,3 +1,4 @@
+import { NotFoundError, ValidationError } from "../exceptions/CustomError";
 import offUserModel from "../models/off_users";
 import OffUserRepo from "../repository/OffUserRepo";
 import { OffUserDocument } from "../types/offUserType";
@@ -15,23 +16,20 @@ interface IPayload {
 
 class OffUserService{
     async login(userData: Partial<OffUserDocument>):Promise<String>{
-
-        try {
             const { email, password } = userData;
         
             if (!email || !password) {
-            //    res.json({ Error: "True", Message: "All Fields Required..." });
-                throw new Error("Ensure to enter every field");
+                throw new ValidationError("Ensure to enter every field");
             }
         
             const userExist = await offUserModel.findOne({ email }) as OffUserDocument;
         
             if (!userExist) {
-                throw new Error("User not found, Enter valid credentials");
+                throw new NotFoundError("User not found, Enter valid credentials");
             }
         
             if (password !== userExist.password) {
-                throw new Error("Password is not matched, Re-enter");
+                throw new ValidationError("Password is not correct, Re-enter");
             }
             const payload: IPayload = {
                 user: {
@@ -45,23 +43,10 @@ class OffUserService{
               if (!JWT_SECRET_KEY) {
                 throw new Error("JWT_SECRET_KEY is not defined in environment variables");
               }
-        
-            // jwt.sign(payload, JWT_SECRET_KEY, { expiresIn: "100d" }, (err, token) => {
-            //   if (err) {
-            //     console.log(err.message);
-            //     throw new Error("Token is not generated");
-            //   }
-            //    return token;
-            // });
 
               // Generate JWT token synchronously
             const token = jwt.sign(payload, JWT_SECRET_KEY, { expiresIn: "100d" });
             return token;
-            
-          } catch (error) {
-            console.error("Login error:", error);
-            throw error;  // Pass the error to the controller to handle
-          }
     }
 
     async getUserData(id: string): Promise<OffUserDocument>{
