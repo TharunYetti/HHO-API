@@ -30,6 +30,7 @@ export const middleware = (roles:string[]) =>{
       const decoded = jwt.verify(token, JWT_SECRET_KEY); 
 
       req.user = decoded;
+      console.log(req.user.user);
       if (!roles.includes(req.user.user.role)) {
         res.status(403).json({ message: "Access denied" });
       }

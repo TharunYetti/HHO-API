@@ -13,7 +13,7 @@ console.log(JWT_SECRET_KEY)
 
 interface IPayload {
   user: {
-    id: string;
+    id: mongoose.Types.ObjectId;
     role: string;
   };
 }
@@ -35,7 +35,7 @@ class OffUserController{
   }
   async getAllUsers(req:Request,res:Response){
     try{
-      const data = await offUserModel.find();
+      const data = await offUserService.getAll();
       res.status(200).json(data);
     }
     catch(error){
@@ -52,13 +52,10 @@ class OffUserController{
     }
   }
   async updateUsers(req:Request,res:Response){
+    const offUserData = req.body;
     try{
-      const uid = req.params.id;
-      const userExist = await offUserModel.findByIdAndUpdate(uid,req.body);
-      if(!userExist){
-        throw new NotFoundError("User with given Id not found");
-      }
-      res.status(200).json({success:true,userExist});
+      const result = offUserService.updateById(req.params.id,offUserData);
+      res.status(200).json({success:true,result});
     }catch(e){
       if(e instanceof NotFoundError){
         res.status(404).json({success:false,message:e.message});
@@ -69,8 +66,8 @@ class OffUserController{
   }
     async getUserData(req: Request, res: Response){
       try{
-        const data = await offUserService.getUserData(req.params.id);
-        res.json({success:true, data:data});
+        const data = await offUserService.getUserData(req.user.user.id);
+        res.status(200).json({success:true, data});
       }catch(error){
         res.status(400).json({success:false, message: error.message});
       }
