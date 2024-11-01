@@ -25,11 +25,11 @@ class OffUserController{
       res.json({ success: true, token });
     } catch (error) {
       if(error instanceof NotFoundError){
-        res.status(404).json({success:false,message:error.message});
+        res.status(200).json({success:false,message:error.message});
       }else if(error instanceof ValidationError){
-        res.status(400).json({success:false,message:error.message});
+        res.status(200).json({success:false,message:error.message});
       }else{
-        res.status(500).json({success:false,message: "Error in updating transaction",error});
+        res.status(200).json({success:false,message: "Error in logging in",error});
       }
     }
 
@@ -63,49 +63,3 @@ class OffUserController{
 }
 
 export default new OffUserController();
-
-// export const offUserLogin = async (req: Request, res: Response)=> {
-//   try {
-//     const { email, password } = req.body;
-
-//     if (!email || !password) {
-//        res.json({ Error: "True", Message: "All Fields Required..." });
-//     }
-
-//     const userExist = await offUserModel.findOne({ email }) as OffUserDocument;
-
-//     if (!userExist) {
-//       res.json({
-//         Error: "True",
-//         Message: "Login with Valid Credentials....",
-//       });
-//     }
-
-//     if (password !== userExist.password) {
-//       res.json({
-//         Error: "True",
-//         Message: "Login with Valid Credentials...",
-//       });
-//     }
-//     const payload: IPayload = {
-//       user: {
-//         id: String(userExist._id),
-//         role: userExist.role,
-//       },
-//     };
-
-//     jwt.sign(payload, JWT_SECRET_KEY, { expiresIn: "100d" }, (err, token) => {
-//       if (err) {
-//         console.log(err.message);
-//         res.json({ Error: "True", Message: "Token is not generated" });
-//       }
-//        res.json({ token });
-//     });
-//   } catch (error: unknown) {
-//     if (error instanceof Error) {
-//        res.json({ Error: "True", Message: error.message });
-//     } else {
-//        res.json({ Error: "True", Message: "Something went wrong" });
-//     }
-//   }
-// };
