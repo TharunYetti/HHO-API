@@ -2,6 +2,7 @@ import TestimonialModel from "../models/TestimonialModel";
 import { Request, Response } from "express";
 import { TestimonialDocument } from "../types/testimonialType";
 import testimonialService from "../services/TestimonialService";
+import { ConflictError, NotFoundError, ValidationError } from "../exceptions/CustomError";
 
 class TestimonialController {
 
@@ -12,7 +13,13 @@ class TestimonialController {
       const testimonial = await testimonialService.createTestimonial(testimonialData);
       res.status(200).json(testimonial);
     } catch (error) {
-      res.status(500).json({ message: "Error creating testimonial", error });
+      if(error instanceof ValidationError){
+        res.status(400).json({success:false,message:error.message});
+      }else if(error instanceof ConflictError){
+        res.status(409).json({success:false,message:error.message});
+      }else{
+        res.status(500).json({success:false, message: "Error adding testimonial", error });
+      }
     }
   }
 
@@ -23,7 +30,13 @@ class TestimonialController {
       const deletedTestimonial = await testimonialService.deleteTestimonial(req.params.id);
       res.status(200).json(deletedTestimonial);
     } catch (err) {
-      res.status(500).json({ message: "Error deleting testimonial", err });
+      if(err instanceof NotFoundError){
+        res.status(404).json({success:false,message:err.message});
+      }else if(err instanceof ValidationError){
+        res.status(400).json({success:false,message:err.message});
+      }else{
+        res.status(500).json({ success:false,message: "Error in deleting transaction", err });
+      }
     }
   }
 
@@ -36,7 +49,13 @@ class TestimonialController {
       const updatedTestimonial = await testimonialService.updateTestimonial(id, testimonialData);
       res.status(200).json(updatedTestimonial);
     } catch (err) {
-      res.status(500).json({ message: "Error updating testimonial", err });
+      if(err instanceof NotFoundError){
+        res.status(404).json({success:false,message:err.message});
+      }else if(err instanceof ValidationError){
+        res.status(400).json({success:false,message:err.message});
+      }else{
+        res.status(500).json({success:false,message: "Error in updating testimonial",err});
+      }
     }
   }
 

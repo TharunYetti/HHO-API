@@ -13,7 +13,6 @@ class TransactionService{
     }
 
     async deleteTransaction(id: string): Promise<TransactionDocument|null>{
-        console.log("Into the service");
         const response =  await transactionRepository.delete(id);
         if(!response){
             throw new NotFoundError("Transaction with given Id not found");

@@ -1,34 +1,31 @@
+import { NotFoundError, ValidationError } from "../exceptions/CustomError";
 import testimonialRepository from "../repository/testimonialRepo";
 import { TestimonialDocument } from "../types/testimonialType";
 
 class TestimonialService {
   
   async createTestimonial(testimonialData: Partial<TestimonialDocument>): Promise<TestimonialDocument | null> {
-    try {
-      return await testimonialRepository.create(testimonialData);
-    } catch (err) {
-      console.error("Error creating testimonial:", err);
-      return null; // Handle error case by returning null or an appropriate value
+    const {name,message,rating,discipline} = testimonialData;
+    if(!name|| !message || !rating || !discipline){
+      throw new ValidationError("Insufficinet paramters");
     }
+    return await testimonialRepository.create(testimonialData);
   }
 
   async deleteTestimonial(id: string): Promise<TestimonialDocument | null> {
-    console.log("Deleting testimonial in service");
-    try {
-      return await testimonialRepository.delete(id);
-    } catch (err) {
-      console.log("Error in deleting testimonial with id:", id);
-      return null;
+    const response = await testimonialRepository.delete(id);
+    if(!response){
+      throw new NotFoundError("Transaction with given Id not found");
     }
+    return response;
   }
 
   async updateTestimonial(id: string, testimonialData: Partial<TestimonialDocument>): Promise<TestimonialDocument | null> {
-    try {
-      return await testimonialRepository.update(id, testimonialData);
-    } catch (error) {
-      console.error("Error updating testimonial:", error);
-      return null;
+    const response = await testimonialRepository.update(id, testimonialData);
+    if(!response){
+      throw new NotFoundError("Transaction with given Id not found");
     }
+    return response;
   }
 
   async getAllTestimonials(): Promise<TestimonialDocument[] | null> {

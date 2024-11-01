@@ -15,7 +15,7 @@ class TransactionController{
       if(error instanceof ValidationError){
         res.status(400).json({success:false,message:error.message});
       }else{
-        res.status(500).json({ message: "Error adding transaction", error });
+        res.status(500).json({success:false, message: "Error adding transaction", error });
       }
     }
   }
