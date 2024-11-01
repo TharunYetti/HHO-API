@@ -4,11 +4,9 @@ import transactionController from "../controllers/transactionController";
 import { middleware } from "../middleware/middleware";
 const router = express.Router();
 
-router.use(middleware)
-
-router.post('/add-transaction',transactionController.createTransaction);
-router.put("/update-transaction/:id",transactionController.updateTransaction);
-router.delete("/delete-transaction/:id",transactionController.deleteTransaction);
+router.post('/add-transaction',middleware(["Accountant"]),transactionController.createTransaction);
+router.put("/update-transaction/:id",middleware(["Accountant"]),transactionController.updateTransaction);
+router.delete("/delete-transaction/:id",middleware(["Accountant"]),transactionController.deleteTransaction);
 router.get("/get-all-transactions",transactionController.getAllTransactions);
 router.get("/search-transactions",transactionController.getMatchedTransactions);
 export default router;

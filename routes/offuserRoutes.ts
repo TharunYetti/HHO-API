@@ -1,9 +1,11 @@
 import express from "express";
 const router = express.Router();
 import offUserController from "../controllers/offUserController";
-router.get("/",offUserController.getAllUsers);
+import { middleware } from "../middleware/middleware";
+router.get("/",middleware(["Admin","Core"]),offUserController.getAllUsers);
 router.post("/login", offUserController.login);
-router.get("/:id", offUserController.getUserData);
-router.put("/updateUsers/:id",offUserController.updateUsers);
 router.post("/newUser",offUserController.addUser);
-export default router;
+router.get("/:id",middleware(["Admin","Core"]),offUserController.getUserData);
+router.put("/updateUsers/:id",middleware(["Admin","Core"]),offUserController.updateUsers);
+
+export default router

@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { Model, Document, FilterQuery } from "mongoose";
+import { ValidationError } from "../exceptions/CustomError";
 
 // const ValidationError = require("../utils/errors/validation-error");
 class CrudRepository<T extends Document> {
@@ -23,8 +24,8 @@ class CrudRepository<T extends Document> {
     console.log("Into the crudRepo");
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      throw new Error("Invalid ID format");
-  }
+      throw new ValidationError("Invalid ID format");
+    }
 
     try {
       const response = await this.model.findByIdAndDelete(id);
@@ -65,6 +66,9 @@ class CrudRepository<T extends Document> {
 
   async update(id: string, data: Partial<T>): Promise<T | null>{
     console.log("in repo:", id, data);
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new ValidationError("Invalid ID format");
+    }
     try {
       const response = await this.model.findByIdAndUpdate(id, data, {
         new: true,

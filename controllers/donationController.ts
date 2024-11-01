@@ -2,6 +2,7 @@ import Donation from "../models/DonationModel";
 import { Request, Response } from "express";
 import { DonationDocument } from "../types/donationType";
 import donationService from "../services/DonationService";
+import { NotFoundError, ValidationError } from "../exceptions/CustomError";
 
 class DonationController{
 
@@ -10,9 +11,15 @@ class DonationController{
     const donationData: Partial<DonationDocument> = req.body;
     try {
       const donation = await donationService.createDonation(donationData);
-      res.status(200).json(donation);
-    } catch (error) {
-      res.status(500).json({ message: "Error creating donation", error });
+      res.status(200).json({success:true,donation});
+    } catch (err) {
+      if(err instanceof NotFoundError){
+        res.status(404).json({success:false,message:err.message});
+      }else if(err instanceof ValidationError){
+        res.status(400).json({success:false,message:err.message});
+      }else{
+        res.status(500).json({success:false,message: "Error in adding donation",err});
+      }
     }
   }
 
@@ -22,9 +29,15 @@ class DonationController{
     const donationData: Partial<DonationDocument> = req.body;
     try {
       const updatedDonation = await donationService.updateDonation(id, donationData);
-      res.status(200).json(updatedDonation);
-    } catch (error) {
-      res.status(500).json({ message: "Error updating donation", error });
+      res.status(200).json({success:true,updatedDonation});
+    } catch (err) {
+      if(err instanceof NotFoundError){
+        res.status(404).json({success:false,message:err.message});
+      }else if(err instanceof ValidationError){
+        res.status(400).json({success:false,message:err.message});
+      }else{
+        res.status(500).json({success:false,message: "Error in updating donation",err});
+      }
     }
   }
 
@@ -33,9 +46,15 @@ class DonationController{
     const { id } = req.params;
     try {
       await donationService.deleteDonation(id);
-      res.status(200).json({ message: "Donation successfully deleted" });
-    } catch (error) {
-      res.status(500).json({ message: "Error deleting donation", error });
+      res.status(200).json({success:true, message: "Donation successfully deleted"});
+    } catch (err) {
+      if(err instanceof NotFoundError){
+        res.status(404).json({success:false,message:err.message});
+      }else if(err instanceof ValidationError){
+        res.status(400).json({success:false,message:err.message});
+      }else{
+        res.status(500).json({ success:false,message: "Error in deleting donation", err });
+      }
     }
   }
 
@@ -62,91 +81,3 @@ class DonationController{
 }
 
 export default new DonationController();
-
-// Controller function to create a new donation
-// const createDonation = async (req: Request, res: Response) => {
-//   try {
-//     const { name, title, description, amt, date } = req.body;
-
-//     const newDonation = new Donation({
-//       name,
-//       title,
-//       description,
-//       amt,
-//       date,
-//     });
-
-//     const savedDonation = await newDonation.save();
-//     res.status(201).json(savedDonation);
-//   } catch (error: unknown) {
-//     if (error instanceof Error) {
-//       res.status(400).json({ message: error.message });
-//     } else {
-//       res.status(400).json({ message: "Unknown error occurred" });
-//     }
-//   }
-// };
-
-// //update Donation
-// const updateDonation = async (req: Request, res: Response) => {
-//   try {
-//     const { name, amt, description, title, date } = req.body;
-//     if (!name || !amt || !description || !title || !date)
-//       res.status(400).json({ message: "All fields are required" });
-//     const newDonation = {
-//       name,
-//       amt,
-//       description,
-//       title,
-//       date,
-//     };
-//     const updatedDonation = await Donation.findByIdAndUpdate(
-//       req.params.id,
-//       newDonation
-//     );
-//     if (updatedDonation) {
-//        res.json(updatedDonation);
-//     } else
-//       res
-//         .status(200)
-//         .json({ Error: "True", Message: "Not Updated Donations.." });
-//   } catch (error: unknown) {
-//     if (error instanceof Error) {
-//       res.status(400).json({ message: error.message });
-//     } else {
-//       res.status(400).json({ message: "Unknown error occurred" });
-//     }
-//   }
-// };
-
-// const deleteDonation = async (req: Request, res: Response): Promise<void> => {
-//   try {
-//     const donation = await Donation.findByIdAndDelete(req.params.id);
-//     if (!donation) {
-//       res.status(404).json({ message: "Donation not found" });
-//     }
-//     res.status(200).json({ message: "Donation deleted successfully" });
-//   } catch (error: unknown) {
-//     if (error instanceof Error) {
-//       res.status(400).json({ message: error.message });
-//     } else {
-//       res.status(400).json({ message: "Unknown error occurred" });
-//     }
-//   }
-// };
-
-// //getall Donations
-// const getAllDonations = async (req: Request, res: Response) => {
-//   try {
-//     const donations = await Donation.find();
-//     res.status(200).json(donations);
-//   } catch (error: unknown) {
-//     if (error instanceof Error) {
-//       res.status(400).json({ message: error.message });
-//     } else {
-//       res.status(400).json({ message: "Unknown error occurred" });
-//     }
-//   }
-// };
-
-// export { createDonation, updateDonation, deleteDonation, getAllDonations };
