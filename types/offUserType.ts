@@ -5,4 +5,8 @@ export interface OffUserDocument extends Document{
     email: string;
     password: string;
     role: string;
+    image:string,
+    ID:string,
+    linkedin:string,
+    mobile:string
   }

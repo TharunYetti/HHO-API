@@ -5,5 +5,5 @@ router.get("/",offUserController.getAllUsers);
 router.post("/login", offUserController.login);
 router.get("/:id", offUserController.getUserData);
 router.put("/updateUsers/:id",offUserController.updateUsers);
-
-export default router
+router.post("/newUser",offUserController.addUser);
+export default router;

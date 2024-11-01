@@ -36,6 +36,15 @@ class OffUserController{
       res.status(400).json({success:false,message:error.message});
     }
   }
+  async addUser(req:Request,res:Response){
+    try{
+      const {name,email,image,ID,password,role,linkedin,mobile} = req.body;
+      const user = await offUserModel.create(req.body);
+      res.status(200).json(user);
+    }catch(e){
+      res.status(400).json(e);
+    }
+  }
   async updateUsers(req:Request,res:Response){
     try{
       const uid = req.params.id;

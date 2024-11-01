@@ -16,7 +16,25 @@ const offUserSchema = new mongoose.Schema<OffUserDocument>({
     role:{
         type:String,
         required:true
+    },
+    image:{
+        type:String,
+        required:true
+    },
+    mobile:{
+        type:String,
+        required:true
+    },
+    linkedin:{
+        type:String,
+        required:true
+    },
+    ID:{
+        type:String,
+        required:true
     }
+},{
+    strict:false
 })
 
 
