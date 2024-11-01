@@ -4,7 +4,7 @@ import transactionController from "../controllers/transactionController";
 import { middleware } from "../middleware/middleware";
 const router = express.Router();
 
-router.use(middleware)
+// router.use(middleware)
 
 router.post('/add-transaction',transactionController.createTransaction);
 router.put("/update-transaction/:id",transactionController.updateTransaction);

@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import { Request, Response } from "express";
 import transactionService from "../services/TransactionService";
 import { TransactionDocument } from "../types/transactionType";
-import { ValidationError } from "../exceptions/CustomError";
+import { NotFoundError, ValidationError } from "../exceptions/CustomError";
 
 class TransactionController{
   async createTransaction(req: Request, res: Response) :Promise<void>{
@@ -26,19 +26,30 @@ class TransactionController{
       const trsn = await transactionService.deleteTransaction(req.params.id); 
       res.status(200).json(trsn);
     }catch(err){
-      res.status(500).json({ message: "Error in deleting transaction", err });
+      if(err instanceof NotFoundError){
+        res.status(404).json({success:false,message:err.message});
+      }else if(err instanceof ValidationError){
+        res.status(400).json({success:false,message:err.message});
+      }else{
+        res.status(500).json({ success:false,message: "Error in deleting transaction", err });
+      }
     }
   } 
 
   async updateTransaction(req: Request, res: Response){
-    console.log("Into the controller");
     const {id} = req.params;
     const transactionData = req.body;
     try{
       const trsn = await transactionService.updateTransaction(id,transactionData);
       res.status(200).json(trsn);
     }catch(err){
-      res.status(500).json({message: "Error in updating transaction",err});
+      if(err instanceof NotFoundError){
+        res.status(404).json({success:false,message:err.message});
+      }else if(err instanceof ValidationError){
+        res.status(400).json({success:false,message:err.message});
+      }else{
+        res.status(500).json({success:false,message: "Error in updating transaction",err});
+      }
     }
   }
 
