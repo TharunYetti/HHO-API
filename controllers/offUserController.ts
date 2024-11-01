@@ -22,17 +22,16 @@ class OffUserController{
   async login(req: Request, res: Response){
     try {
       const token = await offUserService.login(req.body);
-      res.json({ success: true, token });
+      res.status(200).json({ success: true, token });
     } catch (error) {
       if(error instanceof NotFoundError){
-        res.status(200).json({success:false,message:error.message});
+        res.status(404).json({success:false,message:error.message});
       }else if(error instanceof ValidationError){
-        res.status(200).json({success:false,message:error.message});
+        res.status(400).json({success:false,message:error.message});
       }else{
-        res.status(200).json({success:false,message: "Error in logging in",error});
+        res.status(500).json({success:false,message: "Error in logging in",error});
       }
     }
-
   }
   async getAllUsers(req:Request,res:Response){
     try{

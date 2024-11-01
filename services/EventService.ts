@@ -1,44 +1,30 @@
+import { NotFoundError } from "../exceptions/CustomError";
 import eventModel from "../models/EventModel";
 import subEventModel from "../models/SubEventModel";
 import { EventDocument } from "../types/eventType"; // Assuming you have types defined for Event
 
 class EventService {
   async createEvent(eventData: Partial<EventDocument>): Promise<EventDocument | null> {
-    try {
       const record = await eventModel.create(eventData);
       return record;
-    } catch (error) {
-      console.error("Error creating event:", error);
-      throw error;
-    }
   }
 
   async updateEvent(eventId: string, eventData: Partial<EventDocument>): Promise<EventDocument | null> {
-    try {
       const event = await eventModel.findById(eventId);
       if (!event) {
-        throw new Error("Event not found");
+        throw new NotFoundError("Event not found with given Id");
       }
       const updatedEvent = await eventModel.findByIdAndUpdate(eventId, eventData, { new: true });
       return updatedEvent;
-    } catch (error) {
-      console.error("Error updating event:", error);
-      throw error;
-    }
   }
 
   async deleteEvent(eventId: string): Promise<void> {
-    try {
       const event = await eventModel.findById(eventId);
       if (!event) {
-        throw new Error("Event not found");
+        throw new NotFoundError("Event not found with given Id");
       }
       await eventModel.findByIdAndDelete(eventId);
       await subEventModel.deleteMany({ mainEventId: eventId });
-    } catch (error) {
-      console.error("Error deleting event:", error);
-      throw error;
-    }
   }
 
   async getAllEvents(): Promise<EventDocument[]> {

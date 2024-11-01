@@ -31,9 +31,15 @@ class EventController {
     const eventData: Partial<EventDocument> = req.body;
     try {
       const updatedEvent = await eventService.updateEvent(id, eventData);
-      res.status(200).json(updatedEvent);
-    } catch (error) {
-      res.status(500).json({ message: "Error updating event", error });
+      res.status(200).json({success:true,updatedEvent});
+    } catch (err) {
+      if(err instanceof NotFoundError){
+        res.status(404).json({success:false,message:err.message});
+      }else if(err instanceof ValidationError){
+        res.status(400).json({success:false,message:err.message});
+      }else{
+        res.status(500).json({success:false,message: "Error in updating event",err});
+      }
     }
   }
 
@@ -42,9 +48,15 @@ class EventController {
     const { id } = req.params;
     try {
       await eventService.deleteEvent(id);
-      res.status(200).json({ message: "Event successfully deleted" });
-    } catch (error) {
-      res.status(500).json({ message: "Error deleting event", error });
+      res.status(200).json({success:true, message: "Event successfully deleted" });
+    } catch (err) {
+      if(err instanceof NotFoundError){
+        res.status(404).json({success:false,message:err.message});
+      }else if(err instanceof ValidationError){
+        res.status(400).json({success:false,message:err.message});
+      }else{
+        res.status(500).json({ success:false,message: "Error in deleting event", err });
+      }
     }
   }
 

@@ -10,7 +10,7 @@ class TransactionController{
     const transactionData = req.body;
     try{
       const transaction = await transactionService.createTransaction(transactionData);
-      res.status(200).json(transaction);
+      res.status(200).json({success:true,transaction});
     }catch(error){
       if(error instanceof ValidationError){
         res.status(400).json({success:false,message:error.message});
@@ -24,7 +24,7 @@ class TransactionController{
     console.log("Into the controller");
     try{
       const trsn = await transactionService.deleteTransaction(req.params.id); 
-      res.status(200).json(trsn);
+      res.status(200).json({success:true,trsn});
     }catch(err){
       if(err instanceof NotFoundError){
         res.status(404).json({success:false,message:err.message});
@@ -41,7 +41,7 @@ class TransactionController{
     const transactionData = req.body;
     try{
       const trsn = await transactionService.updateTransaction(id,transactionData);
-      res.status(200).json(trsn);
+      res.status(200).json({success:true,trsn});
     }catch(err){
       if(err instanceof NotFoundError){
         res.status(404).json({success:false,message:err.message});
