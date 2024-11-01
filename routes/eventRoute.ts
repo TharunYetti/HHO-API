@@ -10,11 +10,11 @@ const router = express.Router();
 
 router.get("/",eventController.getAllEvents);
 
-router.post("/createEvent", eventController.createEvent);
+router.post("/createEvent", middleware(["Admin","Core"]),eventController.createEvent);
 
-router.put("/editEvent/:id", eventController.updateEvent);
+router.put("/editEvent/:id", middleware(["Admin","Core"]),eventController.updateEvent);
 
-router.delete("/deleteEvent/:id", eventController.deleteEvent);
+router.delete("/deleteEvent/:id",middleware(["Admin","Core"]),eventController.deleteEvent);
 
 router.use("/subevent", subEventRoute);
 
