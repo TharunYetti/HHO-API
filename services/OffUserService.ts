@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { NotFoundError, ValidationError } from "../exceptions/CustomError";
 import offUserModel from "../models/off_users";
 import OffUserRepo from "../repository/OffUserRepo";
@@ -8,7 +9,7 @@ const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY as string;
 
 interface IPayload {
     user: {
-      id: string;
+      id:string;
       name: string;
       role: string;
     };
@@ -33,7 +34,7 @@ class OffUserService{
             }
             const payload: IPayload = {
                 user: {
-                  id: String(userExist._id),
+                  id: userExist._id.toString(),
                   name: userExist.name,
                   role: userExist.role,
                 },
@@ -51,7 +52,7 @@ class OffUserService{
 
     async getUserData(id: string): Promise<OffUserDocument>{
       try{
-          console.log(id);
+          console.log(id+"hello");
           return await OffUserRepo.get(id);
       }catch(error){
         console.error("Getting data error :", error);

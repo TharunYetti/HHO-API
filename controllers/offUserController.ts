@@ -13,7 +13,7 @@ console.log(JWT_SECRET_KEY)
 
 interface IPayload {
   user: {
-    id: string;
+    id: mongoose.Types.ObjectId;
     role: string;
   };
 }
