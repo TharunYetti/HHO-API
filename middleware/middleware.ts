@@ -18,9 +18,10 @@ export const middleware = (roles:string[]) =>{
     try {
       const authHeader = req.headers['authorization']; 
       if (!authHeader) {
+        
          res.status(401).json({ message: "Authorization header missing" });
       }
-
+      else{
       const token = authHeader.split(' ')[1]; 
 
       if (!token) {
@@ -34,7 +35,7 @@ export const middleware = (roles:string[]) =>{
       if (!roles.includes(req.user.user.role)) {
         res.status(403).json({ message: "Access denied" });
       }
-    
+      }
       next(); 
     } catch (error: unknown) {
       if (error instanceof Error) {

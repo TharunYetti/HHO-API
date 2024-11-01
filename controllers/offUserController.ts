@@ -4,12 +4,12 @@ import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import offUserService from "../services/OffUserService";
 import { OffUserDocument } from "../types/offUserType";
-import dotenv from  'dotenv';
+import dotenv from "dotenv";
 import { NotFoundError, ValidationError } from "../exceptions/CustomError";
-dotenv.config()
+dotenv.config();
 
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY as string;
-console.log(JWT_SECRET_KEY)
+console.log(JWT_SECRET_KEY);
 
 interface IPayload {
   user: {
@@ -18,60 +18,67 @@ interface IPayload {
   };
 }
 
-class OffUserController{
-  async login(req: Request, res: Response){
-    try {
-      const token = await offUserService.login(req.body);
-      res.status(200).json({ success: true, token });
-    } catch (error) {
-      if(error instanceof NotFoundError){
-        res.status(404).json({success:false,message:error.message});
-      }else if(error instanceof ValidationError){
-        res.status(400).json({success:false,message:error.message});
-      }else{
-        res.status(500).json({success:false,message: "Error in logging in",error});
+class OffUserController {
+  async login(req: Request, res: Response) {
+    if (!res.status) {
+      try {
+        const token = await offUserService.login(req.body);
+
+        res.status(200).json({ success: true, token });
+      } catch (error) {
+        if (error instanceof NotFoundError) {
+          res.status(404).json({ success: false, message: error.message });
+        } else if (error instanceof ValidationError) {
+          res.status(400).json({ success: false, message: error.message });
+        } else {
+          res
+            .status(500)
+            .json({ success: false, message: "Error in logging in", error });
+        }
       }
     }
   }
-  async getAllUsers(req:Request,res:Response){
-    try{
-      const data = await offUserService.getAll();
-      res.status(200).json(data);
-    }
-    catch(error){
-      res.status(400).json({success:false,message:error.message});
+  async getAllUsers(req: Request, res: Response) {
+    if (res.statusCode === 200) {
+      try {
+        const data = await offUserModel.find({});
+        res.status(200).json(data);
+      } catch (error) {
+        res.status(400).json({ success: false, message: error.message });
+      }
     }
   }
-  async addUser(req:Request,res:Response){
-    try{
-      const {name,email,image,ID,password,role,linkedin,mobile} = req.body;
+  async addUser(req: Request, res: Response) {
+    try {
+      const { name, email, image, ID, password, role, linkedin, mobile } =
+        req.body;
       const user = await offUserModel.create(req.body);
       res.status(200).json(user);
-    }catch(e){
+    } catch (e) {
       res.status(400).json(e);
     }
   }
-  async updateUsers(req:Request,res:Response){
+  async updateUsers(req: Request, res: Response) {
     const offUserData = req.body;
-    try{
-      const result = offUserService.updateById(req.params.id,offUserData);
-      res.status(200).json({success:true,result});
-    }catch(e){
-      if(e instanceof NotFoundError){
-        res.status(404).json({success:false,message:e.message});
-      }else{
+    try {
+      const result = offUserService.updateById(req.params.id, offUserData);
+      res.status(200).json({ success: true, result });
+    } catch (e) {
+      if (e instanceof NotFoundError) {
+        res.status(404).json({ success: false, message: e.message });
+      } else {
         res.status(400).json(e);
       }
     }
   }
-    async getUserData(req: Request, res: Response){
-      try{
-        const data = await offUserService.getUserData(req.user.user.id);
-        res.status(200).json({success:true, data});
-      }catch(error){
-        res.status(400).json({success:false, message: error.message});
-      }
+  async getUserData(req: Request, res: Response) {
+    try {
+      const data = await offUserService.getUserData(req.user.user.id);
+      res.status(200).json({ success: true, data });
+    } catch (error) {
+      res.status(400).json({ success: false, message: error.message });
     }
+  }
 }
 
 export default new OffUserController();
