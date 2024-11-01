@@ -1,11 +1,11 @@
 import SubEventModel from '../models/SubEventModel';
 import { SubEventDocument } from '../types/subEventType';
 import crudRepository from './crudRepo';
-class EventRepository extends crudRepository<SubEventDocument>{
+class SubEventRepository extends crudRepository<SubEventDocument>{
     constructor() {
         super(SubEventModel);
     }
  
 }
 
-export default new EventRepository();
+export default new SubEventRepository();

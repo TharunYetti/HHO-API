@@ -61,7 +61,7 @@ class OffUserController{
     async getUserData(req: Request, res: Response){
       try{
         const data = await offUserService.getUserData(req.params.id);
-        res.json({success:true, data:data});
+        res.json({success:true, data});
       }catch(error){
         res.status(400).json({success:false, message: error.message});
       }
