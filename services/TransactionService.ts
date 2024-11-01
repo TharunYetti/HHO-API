@@ -1,15 +1,15 @@
+import { ValidationError } from "../exceptions/CustomError";
 import transactionRepository from "../repository/transactionRepo"
 import  { TransactionDocument } from "../types/transactionType";
 
 class TransactionService{
     
     async createTransaction(transactionData: Partial<TransactionDocument>): Promise<TransactionDocument|null>{
-        try{
+            const {transaction_type,amount,purpose} = transactionData;
+            if(!transaction_type || !amount || !purpose){
+                throw new ValidationError("Insufficinet paramters");
+            }
             return await transactionRepository.create(transactionData);
-        }catch(err){
-            console.error("Error creating transaction:", err);
-            return null;  // Handle error case by returning null or an appropriate value
-        }
     }
 
     async deleteTransaction(id: string): Promise<TransactionDocument|null>{

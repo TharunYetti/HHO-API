@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import { Request, Response } from "express";
 import transactionService from "../services/TransactionService";
 import { TransactionDocument } from "../types/transactionType";
+import { ValidationError } from "../exceptions/CustomError";
 
 class TransactionController{
   async createTransaction(req: Request, res: Response) :Promise<void>{
@@ -11,7 +12,11 @@ class TransactionController{
       const transaction = await transactionService.createTransaction(transactionData);
       res.status(200).json(transaction);
     }catch(error){
-      res.status(500).json({ message: "Error adding transaction", error });
+      if(error instanceof ValidationError){
+        res.status(400).json({success:false,message:error.message});
+      }else{
+        res.status(500).json({ message: "Error adding transaction", error });
+      }
     }
   }
   
