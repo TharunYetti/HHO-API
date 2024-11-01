@@ -8,5 +8,6 @@ router.post("/newUser",offUserController.addUser);
 router.get("/:id",middleware(["Admin","Core"]),offUserController.getUserData);
 router.get("/profile",middleware(["Admin","Core","Accountant"]),offUserController.getUserData);
 router.put("/updateUsers/:id",middleware(["Admin","Core"]),offUserController.updateUsers);
+router.get("/allusers",middleware(["Admin","Core","Accountant"]),offUserController.getAllUsers);
 
 export default router
