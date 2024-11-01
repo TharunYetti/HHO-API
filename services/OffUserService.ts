@@ -59,6 +59,18 @@ class OffUserService{
       }
     }
 
+    async getAll():Promise<OffUserDocument[]|null>{
+      return await OffUserRepo.getAll();
+    }
+
+    async updateById(id: string, offUserData: Partial<OffUserDocument>): Promise<OffUserDocument|null>{
+      const response = await OffUserRepo.update(id, offUserData);
+      if(!response){
+        throw new NotFoundError("Transaction with given Id not found");
+      }
+      return response;
+    }
+
 }
 
 export default new OffUserService();
