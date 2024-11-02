@@ -26,11 +26,11 @@ app.get("/",(req:Request,res:Response)=>{
     res.send("Working");
 })
 
-app.use("/api/event",eventRoute);
+app.use("/api/events",eventRoute);
 app.use('/api/users/offusers',offusers);
 app.use('/api/volunteer',volunteerRoutes);
 app.use('/api/transactions',transactionsRoute);
-app.use("/api/testimonial",testimonialRoute);
+app.use("/api/testimonials",testimonialRoute);
 app.use("/api/activities",activityRoute);
 app.use("/api/donations",donationRoute);
 
