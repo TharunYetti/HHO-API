@@ -23,8 +23,8 @@ class TransactionController{
   async deleteTransaction(req: Request, res: Response){
     console.log("Into the controller");
     try{
-      const trsn = await transactionService.deleteTransaction(req.params.id); 
-      res.status(200).json({success:true,trsn});
+      const data = await transactionService.deleteTransaction(req.params.id); 
+      res.status(200).json({success:true,data});
     }catch(err){
       if(err instanceof NotFoundError){
         res.status(404).json({success:false,message:err.message});
@@ -40,8 +40,8 @@ class TransactionController{
     const {id} = req.params;
     const transactionData = req.body;
     try{
-      const trsn = await transactionService.updateTransaction(id,transactionData);
-      res.status(200).json({success:true,trsn});
+      const data = await transactionService.updateTransaction(id,transactionData);
+      res.status(200).json({success:true,data});
     }catch(err){
       if(err instanceof NotFoundError){
         res.status(404).json({success:false,message:err.message});
