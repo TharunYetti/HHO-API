@@ -23,7 +23,6 @@ class OffUserController {
     if (!res.status) {
       try {
         const token = await offUserService.login(req.body);
-
         res.status(200).json({ success: true, token });
       } catch (error) {
         if (error instanceof NotFoundError) {
