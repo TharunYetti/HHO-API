@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 import offUserService from "../services/OffUserService";
 import { OffUserDocument } from "../types/offUserType";
 import dotenv from "dotenv";
-import { NotFoundError, ValidationError } from "../exceptions/CustomError";
+import { ConflictError, NotFoundError, ValidationError } from "../exceptions/CustomError";
 dotenv.config();
 
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY as string;
@@ -20,10 +20,8 @@ interface IPayload {
 
 class OffUserController {
   async login(req: Request, res: Response) {
-    if (!res.status) {
       try {
         const token = await offUserService.login(req.body);
-
         res.status(200).json({ success: true, token });
       } catch (error) {
         if (error instanceof NotFoundError) {
@@ -35,7 +33,6 @@ class OffUserController {
             .status(500)
             .json({ success: false, message: "Error in logging in", error });
         }
-      }
     }
   }
   async getAllUsers(req: Request, res: Response) {
@@ -50,18 +47,20 @@ class OffUserController {
   }
   async addUser(req: Request, res: Response) {
     try {
-      const { name, email, image, ID, password, role, linkedin, mobile } =
-        req.body;
-      const user = await offUserModel.create(req.body);
+      const user = await offUserService.addUser(req.body);
       res.status(200).json(user);
     } catch (e) {
-      res.status(400).json(e);
+      if(e instanceof ConflictError){
+        res.status(409).json({message:e.message});
+      }else{
+        res.status(400).json(e);
+      }
     }
   }
   async updateUsers(req: Request, res: Response) {
     const offUserData = req.body;
     try {
-      const result = offUserService.updateById(req.params.id, offUserData);
+      const result = await offUserService.updateById(req.params.id, offUserData);
       res.status(200).json({ success: true, result });
     } catch (e) {
       if (e instanceof NotFoundError) {
@@ -77,6 +76,18 @@ class OffUserController {
       res.status(200).json({ success: true, data });
     } catch (error) {
       res.status(400).json({ success: false, message: error.message });
+    }
+  }
+  async deleteUser(req: Request, res: Response) {
+    try {
+      const result = await offUserService.deleteById(req.params.id);
+      res.status(200).json({ success: true, result });
+    } catch (e) {
+      if (e instanceof NotFoundError) {
+        res.status(404).json({ success: false, message: e.message });
+      } else {
+        res.status(400).json(e);
+      }
     }
   }
 }

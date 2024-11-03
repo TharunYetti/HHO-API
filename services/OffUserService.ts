@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { NotFoundError, ValidationError } from "../exceptions/CustomError";
+import { ConflictError, NotFoundError, ValidationError } from "../exceptions/CustomError";
 import offUserModel from "../models/off_users";
 import OffUserRepo from "../repository/OffUserRepo";
 import { OffUserDocument } from "../types/offUserType";
@@ -18,19 +18,19 @@ interface IPayload {
 class OffUserService{
     async login(userData: Partial<OffUserDocument>):Promise<String>{
             const { email, password } = userData;
-        
+            console.log(userData);
             if (!email || !password) {
                 throw new ValidationError("Ensure to enter every field");
             }
         
             const userExist = await offUserModel.findOne({ email }) as OffUserDocument;
-        
+            console.log(userExist)
             if (!userExist) {
                 throw new NotFoundError("User not found, Enter valid credentials");
             }
         
             if (password !== userExist.password) {
-                throw new ValidationError("Password is not correct, Re-enter");
+                throw new ValidationError("Invalid credentials, Re-enter");
             }
             const payload: IPayload = {
                 user: {
@@ -72,6 +72,23 @@ class OffUserService{
       return response;
     }
 
+    async deleteById(id: string): Promise<OffUserDocument|null>{
+      const response = await OffUserRepo.delete(id);
+      if(!response){
+        throw new NotFoundError("Transaction with given Id not found");
+      }
+      return response;
+    }
+
+    async addUser(offUSerData: Partial<OffUserDocument>): Promise<OffUserDocument|null>{
+      const {email} = offUSerData;
+      const userExist = await OffUserRepo.findBy({email:email});
+      if(userExist){
+        throw new ConflictError("User with given mail already exist");
+      }
+      const response = await OffUserRepo.create(offUSerData);
+      return response;
+    }
 }
 
 export default new OffUserService();

@@ -2,12 +2,12 @@ import express from "express";
 const router = express.Router();
 import offUserController from "../controllers/offUserController";
 import { middleware } from "../middleware/middleware";
-router.get("/",middleware(["Admin","Core","Accountant"]),offUserController.getAllUsers);
+router.get("/",middleware(['Admin']),offUserController.getAllUsers);
 router.post("/login", offUserController.login);
-router.post("/newUser",offUserController.addUser);
-router.get("/:id",middleware(["Admin","Core"]),offUserController.getUserData);
+router.post("/newUser",middleware(["Admin"]),offUserController.addUser);
 router.get("/profile",middleware(["Admin","Core","Accountant"]),offUserController.getUserData);
-router.put("/updateUsers/:id",middleware(["Admin","Core"]),offUserController.updateUsers);
+router.put("/updateUsers/:id",middleware(["Admin"]),offUserController.updateUsers);
 router.get("/allusers",middleware(["Admin","Core","Accountant"]),offUserController.getAllUsers);
+router.delete("/deleteUsers/:id",middleware(["Admin"]),offUserController.deleteUser);
 
 export default router

@@ -18,20 +18,16 @@ const offUserSchema = new mongoose.Schema<OffUserDocument>({
         required:true
     },
     image:{
-        type:String,
-        required:true
+        type:String
     },
     mobile:{
-        type:String,
-        required:true
+        type:String
     },
     linkedin:{
-        type:String,
-        required:true
+        type:String
     },
     ID:{
-        type:String,
-        required:true
+        type:String
     }
 },{
     strict:false
