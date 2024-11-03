@@ -1,12 +1,18 @@
+import { error } from 'console';
 import { Request, Response, NextFunction } from 'express';
+import { NotFoundError } from '../exceptions/CustomError';
 
-export const errorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
-  const statusCode = err.statusCode || 500;
+const errorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
+  // const statusCode = err.statusCode || 500;
   const message = err.message || 'Internal Server Error';
-
-  res.status(statusCode).json({
-    success: false,
-    message,
-    stack: process.env.NODE_ENV === 'production' ? null : err.stack
-  });
+  if(err instanceof NotFoundError){
+    return res.status(404).json({success:false,message:err.message});
+  }else{
+    return res.status(500).json({
+                                  success: false,
+                                  message
+                                });
+  }
 };
+
+export default errorHandler;
