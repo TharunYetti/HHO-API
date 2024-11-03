@@ -21,15 +21,6 @@ class ActivityService{
             return activityNew;
     }
 
-    async getActivity(id:string):Promise<ActivityDocument>{
-        try{
-            return await activityRepo.get(id);
-        }catch(error){
-            console.log("Error while reading activity in service layer\nError:",error.message);
-            return null;
-        }
-    }
-
     async getAll():Promise<ActivityDocument[]|null>{
         try{
             return await activityRepo.getAll();

@@ -34,7 +34,7 @@ class TransactionService{
             return await transactionRepository.getAll();
         }catch(err){
             console.error("Error getting all transactions:",err);
-            return null;
+            throw new Error("Failed in getting all transactions");
         }
     }
     async getMacthedTransactions(searchTerm: string,filterBy: string): Promise<TransactionDocument[]|null>{
@@ -44,6 +44,7 @@ class TransactionService{
             return await transactionRepository.getMatched(searchTerm,filterBy) ;
         }catch(err){
             console.error("Error in getting matched transactions:",err);
+            throw new Error("Failed in getting matched transactions");
         }
     }
 

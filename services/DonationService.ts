@@ -34,8 +34,7 @@ class DonationService{
         try{
             return await donationRepository.getAll();
         }catch(err){
-            console.error("Error getting all donations:",err);
-            return null;
+            throw new Error("Failed in getting all donations");
         }
     }
 
@@ -46,6 +45,7 @@ class DonationService{
             return await donationRepository.getMatched(searchTerm);
         }catch(err){
             console.error("Error in getting matched transactions:",err);
+            throw new Error("Failed in getting matched donations");
         }
     }
 }
