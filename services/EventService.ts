@@ -32,7 +32,7 @@ class EventService {
       return await eventModel.find();
     } catch (error) {
       console.error("Error fetching events:", error);
-      throw error;
+      throw new Error("Failed in getting all events");
     }
   }
 

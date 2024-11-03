@@ -56,7 +56,7 @@ class OffUserService{
           return await OffUserRepo.get(id);
       }catch(error){
         console.error("Getting data error :", error);
-        throw error;  // Pass the error to the controller to handle
+        throw new Error("Failed in getting user data");  // Pass the error to the controller to handle
       }
     }
 
