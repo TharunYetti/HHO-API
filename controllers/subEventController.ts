@@ -1,20 +1,16 @@
 import subEventModel from "../models/SubEventModel";
 import  eventModel from "../models/EventModel";
-import { Request, Response } from "express";
-export const getSubEvents = async (req: Request, res: Response) => {
+import { NextFunction, Request, Response } from "express";
+export const getSubEvents = async (req: Request, res: Response,next: NextFunction) => {
   try {
     const subEvents = await subEventModel.find({ mainEventId: req.params.id });
     res.send(subEvents);
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      res.status(400).send(error.message);
-    } else {
-      res.status(400).send("Unknown error occurred");
-    }
+    next(error);
   }
 };
 
-export const updateSubEvent = async (req: Request, res: Response) => {
+export const updateSubEvent = async (req: Request, res: Response,next: NextFunction) => {
   try {
     const { id } = req.params;
     const subEvent = await subEventModel.findById(id);
@@ -43,15 +39,11 @@ export const updateSubEvent = async (req: Request, res: Response) => {
       res.send(updatedSubEvent);
     }
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      res.status(400).send(error.message);
-    } else {
-      res.status(400).send("Unknown error occurred");
-    }
+    next(error);
   }
 };
 
-export const deleteSubEvent = async (req: Request, res: Response) => {
+export const deleteSubEvent = async (req: Request, res: Response,next: NextFunction) => {
   try {
     const { id } = req.params;
     const subEvent = await subEventModel.findById(id);
@@ -71,10 +63,6 @@ export const deleteSubEvent = async (req: Request, res: Response) => {
       }
     }
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      res.status(400).send(error.message);
-    } else {
-      res.status(400).send("Unknown error occurred");
-    }
+    next(error);
   }
 };
