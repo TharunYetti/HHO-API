@@ -56,7 +56,7 @@ export const deleteSubEvent = async (req: Request, res: Response,next: NextFunct
       } else {
         await subEventModel.findByIdAndDelete(id);
         res.status(200).send("Successfully Deleted");
-        mainEvent.preEvents = mainEvent.preEvents.filter(
+        mainEvent.subEvents = mainEvent.subEvents.filter(
           (preEvent) => String(preEvent) !== id
         );
         mainEvent.save();

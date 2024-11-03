@@ -2,7 +2,7 @@ import mongoose, { Schema, model } from "mongoose";
 import { EventDocument } from "../types/eventType";  // Assuming this contains your EventDocument interface
 
 const eventSchema = new Schema<EventDocument>({
-  eventName: {
+  eventTitle: {
     type: String,
     required: true
   },
@@ -11,11 +11,11 @@ const eventSchema = new Schema<EventDocument>({
     required: true
   },
   event_start_date: {
-    type: String,
+    type: Date,
     required: true
   },
   event_end_date: {
-    type: String,
+    type: Date,
     required: true
   },
   eventVenue: {
@@ -25,9 +25,16 @@ const eventSchema = new Schema<EventDocument>({
   eventPoster: {
     type: String
   },
-  preEvents: [{
-    type: [Schema.Types.ObjectId],  
-    required: true
+  subEvents: [{
+    type: [
+      {
+        subEventTitle: String,
+        subEventDescription: String,
+        subEventVenue: String,
+        subEventPoster: String,
+        subEventDate: Date
+      }
+    ]
   }]
 }, {
   timestamps: true
