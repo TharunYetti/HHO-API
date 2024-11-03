@@ -62,6 +62,18 @@ class EventController {
       next(error);
     }
   }
+
+  //subEventRoutes
+
+  async addSubEvent(req: Request, res: Response, next: NextFunction){
+    const subEventData = req.body;
+    try{
+      const event = await eventService.addSubEvent(req.params.id,subEventData);
+      res.status(200).json(event);
+    }catch(error){
+      next(error);
+    }
+  }
 }
 
 export default new EventController();
