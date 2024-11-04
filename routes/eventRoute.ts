@@ -18,6 +18,9 @@ router.delete("/deleteEvent/:id",eventController.deleteEvent);
 
 // router.use("/subevent", subEventRoute);
 
-router.post("/events/:eventId/addSubEvent", eventController.addSubEvent); 
+router.post("/:id/addSubEvent", eventController.addSubEvent); 
+router.get("/:id/getSubEvent/:subEventId", eventController.getSubEvent);
+router.put("/:id/updateSubEvent/:subEventId", eventController.updateSubEvent);
+router.delete("/:id/deleteSubEvent/:subEventId", eventController.deleteSubEvent);
 
 export default router;

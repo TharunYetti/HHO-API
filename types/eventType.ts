@@ -1,4 +1,4 @@
-import { Document, ObjectId } from "mongoose";
+import mongoose, { Document, ObjectId } from "mongoose";
 
 export interface SubEventDocument extends Document{
   subEventTitle: string,

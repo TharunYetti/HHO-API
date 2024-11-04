@@ -66,6 +66,7 @@ class EventController {
   //subEventRoutes
   async addSubEvent(req: Request, res: Response, next: NextFunction){
     const subEventData = req.body;
+    console.log(req.params.id);
     try{
       const event = await eventService.addSubEvent(req.params.id,subEventData);
       res.status(200).json(event);
