@@ -62,6 +62,46 @@ class EventController {
       next(error);
     }
   }
+
+  //subEventRoutes
+  async addSubEvent(req: Request, res: Response, next: NextFunction){
+    const subEventData = req.body;
+    console.log(req.params.id);
+    try{
+      const event = await eventService.addSubEvent(req.params.id,subEventData);
+      res.status(200).json(event);
+    }catch(error){
+      next(error);
+    }
+  }
+  async getSubEvent(req: Request, res: Response, next: NextFunction){
+    const { id, subEventId } = req.params;
+    try{
+      const subEvent = await eventService.getSubEvent(id,subEventId);
+      res.status(200).json(subEvent);
+    }catch(error){
+      next(error);
+    }
+  }
+  async updateSubEvent(req: Request, res: Response, next: NextFunction){
+    const {id, subEventId} = req.params;
+    const updateData  = req.body;
+    try{
+      const subEvent = await eventService.updateSubEvent(id,subEventId,updateData);
+      res.status(200).json(subEvent); 
+    }catch(error){
+      next(error);
+    }
+  }
+  async deleteSubEvent(req: Request, res: Response, next: NextFunction){
+    const {id, subEventId } = req.params;
+    try{
+      const event = await eventService.deleteSubEvent(id,subEventId);
+      res.status(200).json(event);
+    }catch(err){
+      next(err);
+    }
+  }
 }
 
 export default new EventController();
