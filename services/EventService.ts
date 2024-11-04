@@ -3,7 +3,7 @@ import EventModel from "../models/EventModel";
 import eventModel from "../models/EventModel";
 import subEventModel from "../models/SubEventModel";
 import eventRepo from "../repository/EventRepo";
-import { EventDocument, subEvent } from "../types/eventType"; // Assuming you have types defined for Event
+import { EventDocument, SubEventDocument } from "../types/eventType"; // Assuming you have types defined for Event
 
 class EventService {
   async createEvent(eventData: Partial<EventDocument>): Promise<EventDocument | null> {
@@ -67,8 +67,7 @@ class EventService {
   //subevent routes
 
   // Add a new sub-event
-  async addSubEvent(eventId: string, subEventData: Partial<subEvent>): Promise<EventDocument> {
-
+  async addSubEvent(eventId: string, subEventData: Partial<SubEventDocument>): Promise<EventDocument> {
     try {
       const event = await EventModel.findByIdAndUpdate(
         eventId,
@@ -84,7 +83,44 @@ class EventService {
       throw new Error("Failed to add the subEvent");
     }
   };
+  // Get a specific sub-event
+  async getSubEvent(eventId: string, subEventId: string) : Promise<SubEventDocument> {
+      const event = await eventRepo.get(eventId);
+      if (!event) {
+        throw new NotFoundError("Event with given Id not found");;
+      }
+      const subEvent = event.subEvents.find(subEvent => subEvent._id.toString()===subEventId);
+      if (!subEvent) {
+        throw new NotFoundError("SubEvent with given ID not found in the event");;
+      }
 
+      return subEvent;
+  };
+  async updateSubEvent(eventId: string, subEventId: string, updateData: Partial<SubEventDocument|null>): Promise<SubEventDocument>{
+    const event = await eventRepo.get(eventId);
+    if(!event){
+      throw new NotFoundError("Event with given ID not found");
+    }
+    const subEvent = event.subEvents.find(subEvent => subEvent._id.toString()===subEventId);
+    if (!subEvent) {
+      throw new NotFoundError("SubEvent with the given ID not found in the event");
+    }
+    Object.assign(subEvent,updateData);
+    await event.save();
+    return subEvent;
+  }
+  async deleteSubEvent(eventId: string, subEventId: string): Promise<EventDocument|null>{
+    const event = await EventModel.findByIdAndUpdate(
+      eventId,
+      { $pull: { subEvents: { _id: subEventId } } },
+      { new: true }
+    );
+    
+    if (!event) {
+      throw new NotFoundError("Event with given Id not found");
+    }
+    return event;
+  }
 }
 
 export default new EventService();

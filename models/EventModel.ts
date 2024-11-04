@@ -1,5 +1,6 @@
 import mongoose, { Schema, model } from "mongoose";
 import { EventDocument } from "../types/eventType";  // Assuming this contains your EventDocument interface
+import SubEventModel from "./SubEventModel";
 
 const eventSchema = new Schema<EventDocument>({
   eventTitle: {
@@ -26,15 +27,7 @@ const eventSchema = new Schema<EventDocument>({
     type: String
   },
   subEvents: [{
-    type: [
-      {
-        subEventTitle: String,
-        subEventDescription: String,
-        subEventVenue: String,
-        subEventPoster: String,
-        subEventDate: Date
-      }
-    ]
+    type: [ SubEventModel ]
   }]
 }, {
   timestamps: true
