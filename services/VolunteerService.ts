@@ -1,7 +1,7 @@
 import { error } from "console";
 import volunteerRepository from "../repository/VolunteerRepo";
 import { VolunteerDocument } from "../types/volunteerType";
-import { ConflictError, ValidationError } from "../exceptions/CustomError";
+import { ConflictError, NotFoundError, ValidationError } from "../exceptions/CustomError";
 
 class VolunteerService{
     async createVolunteer(volunteerData: Partial<VolunteerDocument>): Promise<VolunteerDocument|null>{
@@ -20,21 +20,19 @@ class VolunteerService{
         
     }
     async deleteVolunteer(id: string): Promise<VolunteerDocument|null>{
-        try{
-            return await volunteerRepository.delete(id);
-        }catch(err){
-            console.log("Error while deleting volunteer in service layer");
-            return null;
+        const result = await volunteerRepository.delete(id);
+        if(!result){
+            throw new NotFoundError("Volunteer with given Id not found");
         }
+        return result;
     }
 
     async updateVolunteer(id: string, transactionData: Partial<VolunteerDocument>): Promise<VolunteerDocument|null>{
-        try{
-            return await volunteerRepository.update(id,transactionData);
-        }catch(error){
-            console.error("Error updating transaction:", error);
-            return null;
+        const result = await volunteerRepository.update(id,transactionData);
+        if(!result){
+            throw new NotFoundError("Volunteer with given Id not found");
         }
+        return result;
     }
     async getAllVolunteers(): Promise<VolunteerDocument[]|null>{
         // console.log("Into the service");
@@ -42,7 +40,7 @@ class VolunteerService{
             return await volunteerRepository.getAll();
         }catch(err){
             console.error("Error getting all transactions:",err);
-            return null;
+            throw new Error("Failed in getting all volunteers");
         }
     }
 

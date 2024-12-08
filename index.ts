@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import express,{Request,Response} from "express";
+import express,{NextFunction, Request,Response} from "express";
 import mongoose from "mongoose";
 import offusers from "./routes/offuserRoutes";
 import volunteerRoutes from "./routes/volunteerRoutes";
@@ -13,7 +13,7 @@ import transactionsRoute from "./routes/transactionRoutes"
 import activityRoute from "./routes/activityRoutes"
 import donationRoute from "./routes/donationRoutes"
 import connectToDB from "./config/connectDB";
-import { errorHandler } from "./middleware/errorHandler";
+import errorHandler from "./middleware/errorHandler";
 
 app.use(express.static("public"));
 app.use(express.json());
@@ -34,7 +34,9 @@ app.use("/api/testimonials",testimonialRoute);
 app.use("/api/activities",activityRoute);
 app.use("/api/donations",donationRoute);
 
-app.use(errorHandler);
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    errorHandler(err, req, res, next);
+  });
 
 app.listen(port,()=>{
     console.log(`Server running at http://localhost:${port}`);

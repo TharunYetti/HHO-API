@@ -34,7 +34,7 @@ class TestimonialService {
       return await testimonialRepository.getAll();
     } catch (err) {
       console.error("Error getting all testimonials:", err);
-      return null;
+      throw new Error("Failed in getting all testimonials");
     }
   }
 
@@ -44,7 +44,7 @@ class TestimonialService {
       return await testimonialRepository.getMatched(searchTerm);
     } catch (err) {
       console.error("Error in getting matched testimonials:", err);
-      return null;
+      throw new Error("Failed in getting matched testimonials");
     }
   }
 }

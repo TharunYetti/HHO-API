@@ -1,36 +1,57 @@
 import mongoose, { Schema, model } from "mongoose";
-import { EventDocument } from "../types/eventType";  // Assuming this contains your EventDocument interface
+import { EventDocument, SubEventDocument } from "../types/eventType";  // Make sure your types are correctly imported
 
-const eventSchema = new Schema<EventDocument>({
-  eventName: {
+// Define the SubEvent Schema
+const subEventSchema = new Schema<SubEventDocument>({
+  subEventTitle: {
     type: String,
-    required: true
+    required: true,
+  },
+  subEventDescription: {
+    type: String,
+    required: true,
+  },
+  subEventVenue: {
+    type: String,
+    required: true,
+  },
+  subEventPoster: {
+    type: String
+  },
+  subEventDate: {
+    type: Date,
+    required: true,
+  },
+}, { _id: true });  // Make sure each subEvent has its own ObjectId
+
+// Define the Event Schema
+const eventSchema = new Schema<EventDocument>({
+  eventTitle: {
+    type: String,
+    required: true,
   },
   eventDescription: {
     type: String,
-    required: true
+    required: true,
   },
   event_start_date: {
-    type: String,
-    required: true
+    type: Date,
+    required: true,
   },
   event_end_date: {
-    type: String,
-    required: true
+    type: Date,
+    required: true,
   },
   eventVenue: {
     type: String,
-    required: true
+    required: true,
   },
   eventPoster: {
-    type: String
+    type: String,
   },
-  preEvents: [{
-    type: [Schema.Types.ObjectId],  
-    required: true
-  }]
+  subEvents: [subEventSchema],  // Use the separate subEventSchema
 }, {
-  timestamps: true
+  timestamps: true,
 });
 
-export default  model<EventDocument>("Event", eventSchema);
+export default model<EventDocument>("Event", eventSchema);

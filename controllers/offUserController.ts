@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import offUserModel from "../models/off_users";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
@@ -19,75 +19,55 @@ interface IPayload {
 }
 
 class OffUserController {
-  async login(req: Request, res: Response) {
+  async login(req: Request, res: Response,next: NextFunction) {
       try {
         const token = await offUserService.login(req.body);
         res.status(200).json({ success: true, token });
       } catch (error) {
-        if (error instanceof NotFoundError) {
-          res.status(404).json({ success: false, message: error.message });
-        } else if (error instanceof ValidationError) {
-          res.status(400).json({ success: false, message: error.message });
-        } else {
-          res
-            .status(500)
-            .json({ success: false, message: "Error in logging in", error });
-        }
+        next(error);
     }
   }
-  async getAllUsers(req: Request, res: Response) {
+  async getAllUsers(req: Request, res: Response,next: NextFunction) {
     if (res.statusCode === 200) {
       try {
         const data = await offUserModel.find({});
         res.status(200).json(data);
       } catch (error) {
-        res.status(400).json({ success: false, message: error.message });
+        next(error);
       }
     }
   }
-  async addUser(req: Request, res: Response) {
+  async addUser(req: Request, res: Response,next: NextFunction) {
     try {
       const user = await offUserService.addUser(req.body);
       res.status(200).json(user);
     } catch (e) {
-      if(e instanceof ConflictError){
-        res.status(409).json({message:e.message});
-      }else{
-        res.status(400).json(e);
-      }
+      next(e);
     }
   }
-  async updateUsers(req: Request, res: Response) {
+  async updateUsers(req: Request, res: Response,next: NextFunction) {
     const offUserData = req.body;
     try {
       const result = await offUserService.updateById(req.params.id, offUserData);
       res.status(200).json({ success: true, result });
     } catch (e) {
-      if (e instanceof NotFoundError) {
-        res.status(404).json({ success: false, message: e.message });
-      } else {
-        res.status(400).json(e);
-      }
+      next(e);
     }
   }
-  async getUserData(req: Request, res: Response) {
+  async getUserData(req: Request, res: Response,next: NextFunction) {
     try {
       const data = await offUserService.getUserData(req.user.user.id);
       res.status(200).json({ success: true, data });
     } catch (error) {
-      res.status(400).json({ success: false, message: error.message });
+      next(error);
     }
   }
-  async deleteUser(req: Request, res: Response) {
+  async deleteUser(req: Request, res: Response,next: NextFunction) {
     try {
       const result = await offUserService.deleteById(req.params.id);
       res.status(200).json({ success: true, result });
     } catch (e) {
-      if (e instanceof NotFoundError) {
-        res.status(404).json({ success: false, message: e.message });
-      } else {
-        res.status(400).json(e);
-      }
+      next(e);
     }
   }
 }
