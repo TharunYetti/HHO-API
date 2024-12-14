@@ -2,7 +2,6 @@ import express from "express";
 const router = express.Router();
 import offUserController from "../controllers/offUserController";
 import { middleware } from "../middleware/middleware";
-// router.get("/",middleware(['Admin']),offUserController.getAllUsers);
 router.get("/",offUserController.getAllUsers);
 router.post("/login", offUserController.login);
 router.post("/newUser",middleware(["Admin"]),offUserController.addUser);
