@@ -4,8 +4,8 @@ import { DonationDocument } from "../types/donationType";
 
 class DonationService{
     async createDonation(donationData: Partial<DonationDocument>): Promise<DonationDocument|null>{
-        const { name, title, description,amt} = donationData;
-        const donationExist = await donationRepository.findBy({name:name, title:title, description: description, amt:amt});
+        const { name, title, description,amt,photo} = donationData;
+        const donationExist = await donationRepository.findBy({name:name, title:title, description: description, amt:amt,photo:photo});
         console.log(donationExist);
         if (donationExist) {
             throw new ConflictError("Donation already exist, enter carefully");

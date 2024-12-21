@@ -22,6 +22,9 @@ const donationSchema = new Schema<DonationDocument>({
   date: {
     type: Date,
     default: Date.now // Automatically set to current date if not provided
+  },
+  photo:{
+    type: String
   }
 });
 

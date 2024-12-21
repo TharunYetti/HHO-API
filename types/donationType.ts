@@ -5,5 +5,6 @@ export interface DonationDocument extends Document{
     title: string,
     description: string,
     amt: number,
-    date: Date
+    date: Date,
+    photo: string
 }
