@@ -13,9 +13,11 @@ import testimonialRoute from "./routes/testimonialRoute";
 import transactionsRoute from "./routes/transactionRoutes"
 import activityRoute from "./routes/activityRoutes"
 import donationRoute from "./routes/donationRoutes"
+import moneyRoute from "./routes/moneyRoutes"
 import connectToDB from "./config/connectDB";
 import errorHandler from "./middleware/errorHandler";
 import  { model, Schema } from "mongoose";
+import moneyController from "./controllers/moneyController";
 
 app.use(bodyParser.json())
 app.use(express.static("public"));
@@ -37,6 +39,9 @@ app.use('/api/transactions',transactionsRoute);
 app.use("/api/testimonials",testimonialRoute);
 app.use("/api/activities",activityRoute);
 app.use("/api/donations",donationRoute);
+app.use("/api/money",moneyRoute);
+//API-ENDPOINT1 : https://localhost:8000/api/money/get-money
+//API-ENDPOINT2 : https://localhost:8000/api/money/update-money
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     errorHandler(err, req, res, next);
@@ -119,67 +124,64 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 
 
   //model for 
-  const moneySchema = new Schema({
-    amount: {
-      type: Number,
-      required: true,
-    },
-    donated_amount:{
-      type:Number,
-      required:true
-    }
-  });
+  // const moneySchema = new Schema({
+  //   amount: {
+  //     type: Number,
+  //     required: true,
+  //   },
+  //   donated_amount:{
+  //     type:Number,
+  //     required:true
+  //   }
+  // });
   
-  const moneyModel = model('Money', moneySchema);
+  // const moneyModel = model('Money', moneySchema);
 
-  app.get('/get-money',async(req,res)=>{
-      try {
-          const money = await moneyModel.find();
-          console.log(money);
-          res.status(200).json({money});
-      } catch (error) {
-          console.log(error.message);
-          res.status(400).json({message:error.message});
-      }
-  })
+  // app.get('/get-money',async(req,res)=>{
+  //     try {
+  //         const money = await moneyModel.find();
+  //         console.log(money);
+  //         res.status(200).json({money});
+  //     } catch (error) {
+  //         console.log(error.message);
+  //         res.status(400).json({message:error.message});
+  //     }
+  // })
 
 
-  app.post('/update-money', async (req, res) => {
-    try {
-      const { amount, donated_amount } = req.body;
+  // app.post('/update-money', async (req, res) => {
+  //   try {
+  //     const { amount, donated_amount } = req.body;
   
-      // Log incoming request body
-      console.log(req.body);
+  //     // Log incoming request body
+  //     console.log(req.body);
   
-      // Find and update the existing document or create a new one if not found
-      const money = await moneyModel.findOneAndUpdate(
-        {}, // Match condition (empty object to match the first document)
-        {
-          $set: {
-            amount: amount,
-            donated_amount: donated_amount,
-          },
-        },
-        {
-          new: true, // Return the updated document
-          upsert: true, // Create a new document if none matches
-        }
-      );
+  //     // Find and update the existing document or create a new one if not found
+  //     const money = await moneyModel.findOneAndUpdate(
+  //       {}, // Match condition (empty object to match the first document)
+  //       {
+  //         $set: {
+  //           amount: amount,
+  //           donated_amount: donated_amount,
+  //         },
+  //       },
+  //       {
+  //         new: true, // Return the updated document
+  //         upsert: true, // Create a new document if none matches
+  //       }
+  //     );
   
-      console.log("Updated Money Document:", money);
+  //     console.log("Updated Money Document:", money);
   
-      // Send response
-      res.status(200).json({ money });
-    } catch (error) {
-      console.error("Error updating money:", error.message);
+  //     // Send response
+  //     res.status(200).json({ money });
+  //   } catch (error) {
+  //     console.error("Error updating money:", error.message);
   
-      // Send error response
-      res.status(400).json({ message: error.message });
-    }
-  });
-  
-  
-  
+  //     // Send error response
+  //     res.status(400).json({ message: error.message });
+  //   }
+  // });
 
 
 app.listen(port,()=>{
