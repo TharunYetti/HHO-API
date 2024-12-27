@@ -5,7 +5,7 @@ import eventModel from "../models/EventModel";
 import subEventModel from "../models/SubEventModel";
 import eventRepo from "../repository/EventRepo";
 import { EventDocument, SubEventDocument } from "../types/eventType"; // Assuming you have types defined for Event
-
+import { getKey,setKey } from "../config/redisClient";
 class EventService {
   async createEvent(eventData: Partial<EventDocument>): Promise<EventDocument | null> {
       const record = await eventRepo.create(eventData);
@@ -31,14 +31,20 @@ class EventService {
   }
 
   async getAllEvents(): Promise<EventDocument[]> {
+    const events = await getKey("events");
+    if(!events){
     try {
-      return await eventRepo.getAll();
+      const fetchedEvents =  await eventRepo.getAll();
+      await setKey("events",JSON.stringify(fetchedEvents),60);
+      return fetchedEvents;
     } catch (error) {
       console.error("Error fetching events:", error);
       throw new Error("Failed in getting all events");
     }
+  }else{
+    return JSON.parse(events);
   }
-
+  }
   async getMatchedEvents(searchTerm: string): Promise<EventDocument[]> {
     try {
       const query: any = { $or: [] };

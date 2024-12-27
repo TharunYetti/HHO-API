@@ -1,7 +1,7 @@
 import { ConflictError, NotFoundError } from "../exceptions/CustomError";
 import donationRepository from "../repository/DonationRepo";
 import { DonationDocument } from "../types/donationType";
-
+import { setKey,getKey } from "../config/redisClient";
 class DonationService{
     async createDonation(donationData: Partial<DonationDocument>): Promise<DonationDocument|null>{
         const { name, title, description,amt,photo} = donationData;
@@ -31,13 +31,19 @@ class DonationService{
     }
     async getAllDonations(): Promise<DonationDocument[]|null>{
         // console.log("Into the service");
+        const donations = await getKey("donations");
+        if(!donations){
         try{
-            return await donationRepository.getAll();
+            const fetchedDonations =  await donationRepository.getAll();
+            await setKey("donations",JSON.stringify(fetchedDonations),60);
+            return fetchedDonations;
         }catch(err){
             throw new Error("Failed in getting all donations");
         }
+    }else{
+        return JSON.parse(donations);
     }
-
+    }
     async getMacthedDonations(searchTerm: string): Promise<DonationDocument[]|null>{
         // console.log("Into the service");
         console.log(searchTerm);

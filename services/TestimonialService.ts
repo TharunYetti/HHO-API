@@ -1,6 +1,7 @@
 import { NotFoundError, ValidationError } from "../exceptions/CustomError";
 import testimonialRepository from "../repository/testimonialRepo";
 import { TestimonialDocument } from "../types/testimonialType";
+import {setKey,getKey} from "../config/redisClient";
 
 class TestimonialService {
   
@@ -31,7 +32,16 @@ class TestimonialService {
   async getAllTestimonials(): Promise<TestimonialDocument[] | null> {
     console.log("Fetching all testimonials in service");
     try {
-      return await testimonialRepository.getAll();
+      let testimonials = await getKey("testimonials");
+      if(!testimonials){
+        console.log("Miss on redis");
+        const fetchedTestimonials =  await testimonialRepository.getAll();
+        await setKey("testimonials",JSON.stringify(fetchedTestimonials),5*60);
+        return fetchedTestimonials;
+      }else{
+        console.log("Hit on redis");
+        return JSON.parse(testimonials);
+      }
     } catch (err) {
       console.error("Error getting all testimonials:", err);
       throw new Error("Failed in getting all testimonials");

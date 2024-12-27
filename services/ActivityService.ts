@@ -1,7 +1,7 @@
 import { ActivityDocument } from "../types/activityType";
 import activityRepo from "../repository/ActivityRepo";
 import { ConflictError, NotFoundError, ValidationError } from "../exceptions/CustomError";
-
+import { setKey,getKey } from "../config/redisClient";
 interface ActivityResponse {
     data: ActivityDocument | null;
     message: string;
@@ -22,12 +22,19 @@ class ActivityService{
     }
 
     async getAll():Promise<ActivityDocument[]|null>{
+        let activities = await getKey("activities");
+        if(!activities){
         try{
-            return await activityRepo.getAll();
+            const fetchedActivities =  await activityRepo.getAll();
+            await setKey("activities",JSON.stringify(fetchedActivities),60);
+            return fetchedActivities;
         }catch(error){
             console.log("Error while reading activities in service layer\nError:",error.message);
             return null;
         }
+    }else{
+        return JSON.parse(activities);
+    }
     }
 
     async updateActivity(id: string,activityData:Partial<ActivityDocument>):Promise<ActivityDocument|null>{
