@@ -1,7 +1,7 @@
 import { NotFoundError, ValidationError } from "../exceptions/CustomError";
 import transactionRepository from "../repository/transactionRepo"
 import  { TransactionDocument } from "../types/transactionType";
-
+import { setKey,getKey } from "../config/redisClient";
 class TransactionService{
     
     async createTransaction(transactionData: Partial<TransactionDocument>): Promise<TransactionDocument|null>{
@@ -30,12 +30,19 @@ class TransactionService{
     }
     async getAllTransactions(): Promise<TransactionDocument[]|null>{
         console.log("Into the service");
+        let transactions = await getKey("transactions");
+        if(!transactions){
         try{
-            return await transactionRepository.getAll();
+            const fetchedTransactions =  await transactionRepository.getAll();
+            await setKey("transactions",JSON.stringify(fetchedTransactions),60);
+            return fetchedTransactions;
         }catch(err){
             console.error("Error getting all transactions:",err);
             throw new Error("Failed in getting all transactions");
         }
+    }else{
+        return JSON.parse(transactions);
+    }
     }
     async getMacthedTransactions(searchTerm: string,filterBy: string): Promise<TransactionDocument[]|null>{
         console.log("Into the service");

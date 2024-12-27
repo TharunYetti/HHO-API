@@ -4,6 +4,10 @@ function runTest() {
   const urls = [
     "http://localhost:8000/api/events",
     "http://localhost:8000/api/activities/getAll",
+    "http://localhost:8000/api/testimonials/",
+    "http://localhost:8000/api/users/offUsers/",
+    "http://localhost:8000/api/donations/getall",
+
   ];
   urls.forEach((url) => {
     autocannon(
