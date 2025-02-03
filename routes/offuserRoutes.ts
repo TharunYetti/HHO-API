@@ -11,7 +11,7 @@ import { uploadExcel, fetchExcelData, downloadLastFile } from "../controllers/ex
 // Configure Multer Storage
 const storage = multer.diskStorage({
     destination: (_req, _file, cb) => {
-        cb(null, "src/uploads");
+        cb(null, "services/uploads");
     },
     filename: (_req, file, cb) => {
         cb(null, `${Date.now()}-${file.originalname}`);
