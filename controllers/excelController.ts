@@ -21,7 +21,7 @@ export const uploadExcel = async (req: Request, res: Response) => {
 
 export const fetchExcelData = async (_req: Request, res: Response) => {
     const records = await getExcelData();
-    res.json(records);
+    res.json({success: true, records});
 };
 
 export const downloadLastFile = async (_req: Request, res: Response) => {
@@ -33,7 +33,7 @@ export const downloadLastFile = async (_req: Request, res: Response) => {
         return;
     }
 
-    const filePath = path.join(__dirname, "../uploads", lastFile.filename);
+    const filePath = path.join(__dirname, "../services/uploads", lastFile.filename);
     if (fs.existsSync(filePath)) {
         res.download(filePath);
     } else {

@@ -10,17 +10,54 @@ if (!fs.existsSync(uploadDir)) {
 
 // Function to process and save Excel data
 export const processExcelFile = async (filePath: string, filename: string) => {
-    const workbook = XLSX.readFile(filePath);
-    const sheetName = workbook.SheetNames[0];
-    const data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
 
-    const newExcel = new ExcelModel({ data, filename });
-    await newExcel.save();
+    const workbook = XLSX.readFile(filePath);
+    const sheetNames = workbook.SheetNames;
+
+    let insertedRecords = [];
+
+    for (const sheetName of sheetNames) {
+        const match = sheetName.match(/\d{4}/); // Extract year from sheet name
+        if (!match) continue; // Skip if no valid year found
+
+        const year = parseInt(match[0]);
+        const data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+
+        if (data.length > 0) {
+            await ExcelModel.deleteMany({ year }); // Remove old data for this year
+
+            const newRecord = new ExcelModel({
+                year,
+                data,
+                filename,
+                uploadedAt: new Date()
+            });
+
+            await newRecord.save();
+            insertedRecords.push(newRecord);
+        }
+    }
+
+    fs.unlinkSync(filePath); // Remove the uploaded file after processing
 };
 
 // Fetch stored Excel data
 export const getExcelData = async () => {
-    return await ExcelModel.find().sort({ uploadedAt: -1 });
+    const records = await ExcelModel.find({}, { _id: 0, year: 1, data: 1 });
+
+    const teamMembers = records.map(record => ({
+        year: record.year,
+        batch: record.data.map((member: any, index: number) => ({
+            sNo: index + 1, 
+            name: member.name,
+            id: member.id,
+            role: member.role,
+            branch: member.branch,
+            year: member.year
+        }))
+    }));
+
+    return teamMembers;
 };
 
 // Get the last uploaded file
