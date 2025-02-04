@@ -49,14 +49,14 @@ export const getExcelData = async () => {
         year: record.year,
         batch: record.data.map((member: any, index: number) => ({
             sNo: index + 1, 
-            name: member.name,
-            id: member.id,
-            role: member.role,
-            branch: member.branch,
-            year: member.year
+            name: member.Name,
+            id: member.ID,
+            role: member.Role,
+            branch: member.Branch,
+            year: member.Year
         }))
     }));
-
+    console.log(JSON.stringify(teamMembers, null, 2));
     return teamMembers;
 };
 
